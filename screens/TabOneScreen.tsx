@@ -4,14 +4,17 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-
+import App from "./App.js";
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import "./global";
 
 const shortenAddress = (address: string) => {
-  return `${address.slice(0, 6)}...${address.slice(
+  global.myAddress = address;
+  let ret = `${address.slice(0, 6)}...${address.slice(
     address.length - 4,
     address.length
   )}`;
+  return ret;
 }
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {

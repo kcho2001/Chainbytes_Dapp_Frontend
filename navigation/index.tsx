@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ConnectorEvents, useWalletConnect } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
@@ -18,6 +19,8 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+
+global.myAddress = "";
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -55,7 +58,12 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const connector = useWalletConnect();
 
+  const connectWallet = React.useCallback(() => {
+    return connector.connect();
+  }, [connector]);
+  
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
@@ -86,7 +94,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
-        component={TabTwoScreen}
+        children={() => <TabTwoScreen address={connector.accounts[0]} />}
         options={{
           title: 'Tab Two',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
