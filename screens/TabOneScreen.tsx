@@ -18,6 +18,7 @@ const shortenAddress = (address: string) => {
 }
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+
   const connector = useWalletConnect();
 
   const connectWallet = React.useCallback(() => {
@@ -26,6 +27,29 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   const killSession = React.useCallback(() => {
     return connector.killSession();
+  }, [connector]);
+
+  const signTransaction = React.useCallback(async () => {
+    console.log(connector.chainId);
+    console.log(connector.session);
+    console.log(connector.clientMeta);
+    var tx = {
+      "id": 1,
+      "jsonrpc": "2.0",
+      "method": "eth_sign",
+      "params": ["0x2BF50D8B4BDeC5d918b92A9231Be2FE16A5F5891", "0xdeadbeaf"],
+    };
+    try {
+      // await connector.signTransaction({
+      //   data: "hello",
+      //   from: "0x2BF50D8B4BDeC5d918b92A9231Be2FE16A5F5891",
+      //   to: "0x961bdA3F1b384f3c1F8DBE26B5eF46bd5a9A80c3",
+      //   value: "0x00",
+      // });
+      await connector.sendCustomRequest(tx);
+    } catch (e) {
+      console.log(e);
+    }
   }, [connector]);
 
   return (
@@ -42,6 +66,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           <Text>{shortenAddress(connector.accounts[0])}</Text>
           <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={signTransaction} style={styles.buttonStyle}>
+            <Text style={styles.buttonTextStyle}>Sign transaction</Text>
           </TouchableOpacity>
         </>
       )}
