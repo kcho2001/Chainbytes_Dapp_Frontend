@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet, Text, Image } from "react-native";
+import { StyleSheet, Text, Image, View } from "react-native";
+import { useEffect, useState} from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
@@ -12,13 +13,20 @@ let contract = new ethers.Contract(contractAddress, contractAbi, provider);
 // Returns the home screen, displaying informaiton
 export default function Home({ route }) {
   const my_address = route.params.address;
+  const [foreman, setForeman] = useState(true);
+  useEffect(()=> {
+    async function getData() {
+      await contract.isAddressForeman(my_address).then((result) => setForeman(result));
+    }
+    getData();
+  }, []);
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
-        <Text style={styles.mainText}>
-          {" "}
-          Hello {getData(my_address) ? "" : "not a "}Foreman{" "}
-        </Text>
+        <View>
+          {foreman && <Text style={styles.mainText}> Hello, Foreman! </Text>}
+          {!foreman && <Text style={styles.mainText}> Hello, Not Foreman!</Text>}
+        </View>
         <Text style={styles.smolText}>{my_address}</Text>
         <Text style={styles.mainText}>
           {" "}
@@ -39,15 +47,6 @@ export default function Home({ route }) {
     </NavigationContainer>
   );
 }
-
-// Checks to see if the address is a foreman (just to show we can access contract functions)
-getData = async (address) => {
-  if (await contract.isAddressForeman(address)) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 const styles = StyleSheet.create({
   screen: {
