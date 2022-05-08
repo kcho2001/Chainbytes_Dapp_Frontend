@@ -1,11 +1,15 @@
 import { StyleSheet, SafeAreaView, Text, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
-import "../ChainBytesConfig.js";
+import * as config from "../ChainBytesConfig";
 import { ethers } from "ethers";
 
 // Contract declaration
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function WorkCalendar(props) {
   const address = props.address; //Address to use for getting checked in dates
