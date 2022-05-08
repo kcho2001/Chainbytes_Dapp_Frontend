@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import WorkerItem from "./Extra/workerItem";
-import "../../ChainBytesConfig.js";
+import * as config from "../../ChainBytesConfig.js";
 import { ethers } from "ethers";
 import moment from "moment";
 import "../../global";
 
 // For connecting to the contract
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function Checked_in({ route }) {
   const [workers, setWorkers] = useState([]);
