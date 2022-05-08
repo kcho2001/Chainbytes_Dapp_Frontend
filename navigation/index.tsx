@@ -10,6 +10,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ConnectorEvents, useWalletConnect } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { ethers } from "ethers";
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -19,8 +21,11 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import * as config from "../screens/ChainBytesConfig";
+
 
 global.myAddress = "";
+
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -60,10 +65,6 @@ function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const connector = useWalletConnect();
 
-  const connectWallet = React.useCallback(() => {
-    return connector.connect();
-  }, [connector]);
-  
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
