@@ -8,7 +8,7 @@ import "@ethersproject/shims";
 import { ethers, getDefaultProvider } from "ethers";
 import Tabs from "./foreman_app/navigation/tabs";
 import FarmTab from "./farm_app/farmTab";
-import "./ChainBytesConfig.js";
+import * as config from "./ChainBytesConfig.js";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 import { RootTabScreenProps } from "../types";
@@ -27,13 +27,12 @@ const Stack = createNativeStackNavigator();
 //let ownerAddress = "0x961bdA3F1b384f3c1F8DBE26B5eF46bd5a9A80c3";
 
 //let myAddress = "0x2BF50D8B4BDeC5d918b92A9231Be2FE16A5F5891";
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
-
-getData = async () => {
-  await contract.isAddressFarm(myAddress).then((result) => console.log(result));
-};
-getData();
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function App(props) {
   const isLoggedIn = false;
@@ -88,7 +87,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <View style={styles.signInBackground}>
-        <Text color="white">Connect with Wallet</Text>
         <TouchableOpacity
           style={styles.signInButton}
           onPress={() =>
