@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import etherium_address from "ethereum-address";
+import ethereum_address from "ethereum-address";
 import "../../global";
 
 export default function Scanner({ navigation }) {
@@ -25,7 +25,7 @@ export default function Scanner({ navigation }) {
   const notAddress = () => {
     Alert.alert(
       "QR READ ERROR",
-      "This is not an etherium address",
+      "This is not an ethereum address",
       [
         {
           text: "Dismiss",
@@ -38,7 +38,7 @@ export default function Scanner({ navigation }) {
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
-    if (etherium_address.isAddress(data)) {
+    if (ethereum_address.isAddress(data)) {
       navigation.navigate("Checked In", { type: type, data: data, new: true });
     } else {
       notAddress();
