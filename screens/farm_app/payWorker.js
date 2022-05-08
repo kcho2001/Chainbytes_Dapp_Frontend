@@ -1,4 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import {
   StyleSheet,
   Text,
@@ -9,15 +11,35 @@ import {
 import { useState } from "react";
 import { ethers } from "ethers";
 import { SafeAreaView } from "react-native-safe-area-context";
-import "../ChainBytesConfig.js";
+import * as config from "../ChainBytesConfig";
 
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function PayWorker(props) {
   const [_workerAddress, onChangeText] = useState(null);
+  const [_paymentAmount, changePaymentAmount] = useState(0);
+  const sendPayment = React.useCallback(async () => {
+    try {
+      const connector = useWalletConnect();
+      await connector.signTransaction({
+        data: "0x",
+        from: "0xbc28Ea04101F03aA7a94C1379bc3AB32E65e62d3",
+        gas: "0x9c40",
+        gasPrice: "0x02540be400",
+        nonce: "0x0114",
+        to: "0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359",
+        value: "0x00",
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [connector]);
   let address = props.address;
-  getData(address);
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -26,23 +48,23 @@ export default function PayWorker(props) {
           onChangeText={onChangeText}
           placeholder="Address of new Foreman"
         />
+        <TextInput
+          style={styles.input}
+          onChangeText={changePaymentAmount}
+          placeholder="Address of new Foreman"
+        />
         <TouchableOpacity
           style={styles.signInButton}
-          onPress={() => getData(_workerAddress)}
+          onPress={() => payWorker(_workerAddress, _paymentAmount)}
         ></TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
   );
 }
 
-// Function to return the last checked in date given an address
-getData = async (address) => {
-  await contract.isAddressFarm(address).then((result) => console.log(result));
-};
-
 // Function to pay a worker based on their address
 // NB: Handle result in a better way. Check for errors
-payWorker = async (address) => {
+payWorker = async (address, paymentAmt) => {
   await contract.payWorker(address).then((result) => console.log(result));
 };
 
