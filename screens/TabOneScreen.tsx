@@ -9,9 +9,6 @@ import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 import "./global";
-import { contractAbi } from './ChainBytesConfig';
-import { ethers } from 'ethers';
-import * as config from "./ChainBytesConfig";
 
 const shortenAddress = (address: string) => {
   global.myAddress = address;
