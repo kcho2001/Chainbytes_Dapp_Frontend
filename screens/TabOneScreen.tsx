@@ -4,7 +4,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import App from "./App.js";
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
