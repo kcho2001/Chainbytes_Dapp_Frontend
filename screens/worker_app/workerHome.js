@@ -4,11 +4,15 @@ import { useState } from "react";
 import { ethers } from "ethers";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
-import "../ChainBytesConfig.js";
+import * as config from "../ChainBytesConfig.js";
 
 // Contract declaration
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function WorkerHomeScreen(props) {
   const [lastCheckedIn, setCheckedIn] = useState("N/A");
