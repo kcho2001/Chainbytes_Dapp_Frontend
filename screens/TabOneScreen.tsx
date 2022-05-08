@@ -6,7 +6,12 @@ import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import App from "./App.js";
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
 import "./global";
+import { contractAbi } from './ChainBytesConfig';
+import { ethers } from 'ethers';
+import * as config from "./ChainBytesConfig";
 
 const shortenAddress = (address: string) => {
   global.myAddress = address;
@@ -29,29 +34,6 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     return connector.killSession();
   }, [connector]);
 
-  const signTransaction = React.useCallback(async () => {
-    console.log(connector.chainId);
-    console.log(connector.session);
-    console.log(connector.clientMeta);
-    var tx = {
-      "id": 1,
-      "jsonrpc": "2.0",
-      "method": "eth_sign",
-      "params": ["0x2BF50D8B4BDeC5d918b92A9231Be2FE16A5F5891", "0xdeadbeaf"],
-    };
-    try {
-      // await connector.signTransaction({
-      //   data: "hello",
-      //   from: "0x2BF50D8B4BDeC5d918b92A9231Be2FE16A5F5891",
-      //   to: "0x961bdA3F1b384f3c1F8DBE26B5eF46bd5a9A80c3",
-      //   value: "0x00",
-      // });
-      await connector.sendCustomRequest(tx);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [connector]);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
@@ -66,9 +48,6 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           <Text>{shortenAddress(connector.accounts[0])}</Text>
           <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
             <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={signTransaction} style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>Sign transaction</Text>
           </TouchableOpacity>
         </>
       )}
