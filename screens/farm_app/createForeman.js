@@ -5,12 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import React from "react";
 import { ethers } from "ethers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ethereum_address from "ethereum-address";
 
 import * as config from "../ChainBytesConfig.js";
 
@@ -55,6 +57,17 @@ export default function CreateForeman(props) {
     },
     [connector]
   );
+
+  // Alert when a QR code is scanned and it is not an address
+  const notAddress = () => {
+    console.log("hello");
+    // Alert.alert(" is not an ethereum address", [
+    //   {
+    //     text: "Dismiss",
+    //     style: "cancel",
+    //   },
+    // ]);
+  };
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -65,7 +78,11 @@ export default function CreateForeman(props) {
         />
         <TouchableOpacity
           style={styles.signInButton}
-          onPress={() => createForeman(newForemanAddress)}
+          onPress={() => {
+            ethereum_address.isAddress(newForemanAddress)
+              ? createForeman(newForemanAddress)
+              : notAddress(newForemanAddress);
+          }}
         >
           <Text style={styles.signInText}>Create Foreman</Text>
         </TouchableOpacity>
@@ -73,21 +90,6 @@ export default function CreateForeman(props) {
     </NavigationContainer>
   );
 }
-
-// Alert when a QR code is scanned and it is not an address
-const notAddress = () => {
-  Alert.alert(
-    "QR READ ERROR",
-    "This is not an ethereum address",
-    [
-      {
-        text: "Dismiss",
-        style: "cancel",
-      },
-    ],
-    { cancelable: true }
-  );
-};
 
 const styles = StyleSheet.create({
   screen: {
