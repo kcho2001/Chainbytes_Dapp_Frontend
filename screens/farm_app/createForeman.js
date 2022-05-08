@@ -6,18 +6,55 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useState } from "react";
+import React from "react";
 import { ethers } from "ethers";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { SafeAreaView } from "react-native-safe-area-context";
-import "../ChainBytesConfig.js";
 
-const provider = new ethers.providers.JsonRpcProvider(url);
-let contract = new ethers.Contract(contractAddress, contractAbi, provider);
+import * as config from "../ChainBytesConfig.js";
+
+const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
+let contract = new ethers.Contract(
+  config.contractAddress,
+  config.contractAbi,
+  provider
+);
 
 export default function CreateForeman(props) {
-  const [newForemanAddress, onChangeText] = useState(null);
+  const [newForemanAddress, onChangeText] = React.useState(null);
   let address = props.address;
-  getData(address);
+  const connector = useWalletConnect();
+  // Function to create the foreman
+  // NB: Handle result in a better way. Check for errors
+  const createForeman = React.useCallback(
+    async (_newForemanAddress) => {
+      const provider = new WalletConnectProvider({
+        rpc: {
+          4: config.providerUrl,
+        },
+        connector: connector,
+        qrcode: false,
+      });
+
+      await provider.enable();
+      const ethers_provider = new ethers.providers.Web3Provider(provider);
+      const signer = ethers_provider.getSigner();
+      let contract = new ethers.Contract(
+        config.contractAddress,
+        config.contractAbi,
+        signer
+      );
+      try {
+        await contract
+          .createForeman(_newForemanAddress)
+          .then((result) => console.log(result));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [connector]
+  );
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -28,22 +65,28 @@ export default function CreateForeman(props) {
         />
         <TouchableOpacity
           style={styles.signInButton}
-          onPress={() => getData(address)}
-        ></TouchableOpacity>
+          onPress={() => createForeman(newForemanAddress)}
+        >
+          <Text style={styles.signInText}>Create Foreman</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
   );
 }
 
-// Function to return the last checked in date given an address
-getData = async (address) => {
-  await contract.isAddressFarm(address).then((result) => console.log(result));
-};
-
-// Function to create the foreman
-// NB: Handle result in a better way. Check for errors
-createForeman = async (address) => {
-  await contract.createForeman(address).then((result) => console.log(result));
+// Alert when a QR code is scanned and it is not an address
+const notAddress = () => {
+  Alert.alert(
+    "QR READ ERROR",
+    "This is not an ethereum address",
+    [
+      {
+        text: "Dismiss",
+        style: "cancel",
+      },
+    ],
+    { cancelable: true }
+  );
 };
 
 const styles = StyleSheet.create({
@@ -79,5 +122,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     alignItems: "center",
     justifyContent: "center",
+  },
+  signInText: {
+    color: "white",
   },
 });
