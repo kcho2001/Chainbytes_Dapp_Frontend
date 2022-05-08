@@ -1,4 +1,4 @@
-contractAbi = [
+export const contractAbi = [
   "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)",
   "event newFarm(address farmAddress)",
   "event newForeman(address farmAddress, address foreman)",
@@ -16,6 +16,7 @@ contractAbi = [
   "function transferOwnership(address newOwner)",
 ];
 
-contractAddress = "0x84FFF7812BFE6a652644Ef6E05B6C8D4359e8AeC"; //"0x0fe2988Ef1d153a5fc1EC251EB46e9dF4E6947f0"
+export const contractAddress = "0x84FFF7812BFE6a652644Ef6E05B6C8D4359e8AeC"; //"0x0fe2988Ef1d153a5fc1EC251EB46e9dF4E6947f0"
 
-url = "https://eth-rinkeby.alchemyapi.io/v2/CSeNZPINOezoRZ0O-BzMthJzvOYD5ZUO";
+export const providerUrl =
+  "https://eth-rinkeby.alchemyapi.io/v2/CSeNZPINOezoRZ0O-BzMthJzvOYD5ZUO";
