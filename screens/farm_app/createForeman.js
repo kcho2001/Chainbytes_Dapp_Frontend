@@ -25,49 +25,56 @@ let contract = new ethers.Contract(
 
 export default function CreateForeman(props) {
   const [newForemanAddress, onChangeText] = React.useState(null);
-  let address = props.address;
   const connector = useWalletConnect();
   // Function to create the foreman
   // NB: Handle result in a better way. Check for errors
   const createForeman = React.useCallback(
     async (_newForemanAddress) => {
-      const provider = new WalletConnectProvider({
-        rpc: {
-          4: config.providerUrl,
-        },
-        connector: connector,
-        qrcode: false,
-      });
-
-      await provider.enable();
-      const ethers_provider = new ethers.providers.Web3Provider(provider);
-      const signer = ethers_provider.getSigner();
-      let contract = new ethers.Contract(
-        config.contractAddress,
-        config.contractAbi,
-        signer
-      );
       try {
+        const provider = new WalletConnectProvider({
+          rpc: {
+            4: config.providerApi,
+          },
+          connector: connector,
+          qrcode: false,
+        });
+
+        await provider.enable();
+        const ethers_provider = new ethers.providers.Web3Provider(provider);
+        const signer = ethers_provider.getSigner();
+        let contract = new ethers.Contract(
+          config.contractAddress,
+          config.contractAbi,
+          signer
+        );
         await contract
           .createForeman(_newForemanAddress)
           .then((result) => console.log(result));
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     },
     [connector]
   );
 
   // Alert when a QR code is scanned and it is not an address
-  const notAddress = () => {
-    console.log("hello");
-    // Alert.alert(" is not an ethereum address", [
-    //   {
-    //     text: "Dismiss",
-    //     style: "cancel",
-    //   },
-    // ]);
+  const notAddress = (address) => {
+    Alert.alert(address + " is not an ethereum address", [
+      {
+        text: "Dismiss",
+        style: "cancel",
+      },
+      "",
+      { cancelable: true },
+    ]);
   };
+
+  const checkAddress = (address) => {
+    if (ethereum_address.isAddress(address)) {
+      createForeman(address);
+    } else {
+      notAddress(address);
+    }
+  };
+
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -79,9 +86,8 @@ export default function CreateForeman(props) {
         <TouchableOpacity
           style={styles.signInButton}
           onPress={() => {
-            ethereum_address.isAddress(newForemanAddress)
-              ? createForeman(newForemanAddress)
-              : notAddress(newForemanAddress);
+            onChangeText("");
+            checkAddress(newForemanAddress);
           }}
         >
           <Text style={styles.signInText}>Create Foreman</Text>
