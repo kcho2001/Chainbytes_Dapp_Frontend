@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import ethers from "ethers";
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import WalletConnectProvider from "@walletconnect/web3-provider";
-
+import * as config from "./ChainBytesConfig";
 import "./global";
+import CreateForeman from './farm_app/createForeman';
 
 const shortenAddress = (address: string) => {
   global.myAddress = address;
@@ -18,7 +20,12 @@ const shortenAddress = (address: string) => {
   return ret;
 }
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+// const myContext = React.createContext({
+//   address: "",
+//   contract: {},
+// });
+
+export default function TabOneScreen(this: any, { navigation }: RootTabScreenProps<'TabOne'>) {
 
   const connector = useWalletConnect();
 
@@ -29,6 +36,28 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   const killSession = React.useCallback(() => {
     return connector.killSession();
   }, [connector]);
+
+  // const configureContract = React.useCallback(async () => {
+  //   // Setting up contract to be passed in to other components as a context
+  //   const provider = new WalletConnectProvider({
+  //     rpc: {
+  //       4: config.providerUrl,
+  //     },
+  //     connector: connector,
+  //     qrcode: false,
+  //   });
+  //   await provider.enable();
+  //   const ethers_provider = new ethers.providers.Web3Provider(provider);
+  //   const signer = ethers_provider.getSigner();
+  //   let contract = new ethers.Contract(
+  //     config.contractAddress,
+  //     config.contractAbi,
+  //     signer
+  //   );
+  //   return contract;
+  // }, [connector]);
+
+  // const configuredContract = configureContract;
 
   return (
     <View style={styles.container}>
@@ -87,3 +116,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
+// export function context () {React.useContext(myContext)};

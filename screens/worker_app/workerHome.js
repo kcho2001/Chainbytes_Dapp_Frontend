@@ -1,24 +1,64 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { useState } from "react";
+import React from "react";
 import { ethers } from "ethers";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
 import * as config from "../ChainBytesConfig.js";
 
-// Contract declaration
-const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
-let contract = new ethers.Contract(
-  config.contractAddress,
-  config.contractAbi,
-  provider
-);
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 export default function WorkerHomeScreen(props) {
-  const [lastCheckedIn, setCheckedIn] = useState("N/A");
+  const connector = useWalletConnect();
+  const [lastCheckedIn, setCheckedIn] = React.useState("N/A");
   // getLastCheckedIn(address, contract);
   let address = props.address;
-  getData(address);
+  // Function to get the balance of a user
+  // const getBalance = React.useCallback(async () => {
+  //   try {
+  //     const provider = new WalletConnectProvider({
+  //       rpc: {
+  //         4: config.providerUrl,
+  //       },
+  //       connector: connector,
+  //       qrcode: false,
+  //     });
+  //     await provider.enable();
+  //     const ethers_provider = new ethers.providers.Web3Provider(provider);
+  //     return await connector.accounts[0];
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [connector]);
+  // const balance = getBalance();
+  const getLastCheckedIn = React.useCallback(async () => {
+    try {
+      const provider = new WalletConnectProvider({
+        rpc: {
+          4: config.providerUrl,
+        },
+        connector: connector,
+        qrcode: false,
+      });
+
+      await provider.enable();
+      const ethers_provider = new ethers.providers.Web3Provider(provider);
+      const signer = ethers_provider.getSigner();
+      let contract = new ethers.Contract(
+        config.contractAddress,
+        config.contractAbi,
+        signer
+      );
+      await contract.getDaysCheckedIn(address).then((result) => {
+        setCheckedIn(result[0]);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [connector]);
+
+  getLastCheckedIn();
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -31,10 +71,15 @@ export default function WorkerHomeScreen(props) {
           Balance:{" "}
           <HighlightText
             highlightStyle={{ backgroundColor: "#d3d3d3" }}
-            searchWords={["1000 ETH"]}
-            textToHighlight="1000 ETH"
+            searchWords={["balance.toString()"]}
+            textToHighlight="balance.toString()"
           />
         </Text>
+        <TouchableOpacity onPress={() => getLastCheckedIn}>
+          <Text style={styles.checkInText}>
+            Last checked in: {lastCheckedIn}{" "}
+          </Text>{" "}
+        </TouchableOpacity>
         <Image
           style={styles.image}
           source={{
@@ -45,11 +90,6 @@ export default function WorkerHomeScreen(props) {
     </NavigationContainer>
   );
 }
-
-// Function to return the last checked in date given an address
-getData = async (address) => {
-  await contract.isAddressFarm(address).then((result) => console.log(result));
-};
 
 const styles = StyleSheet.create({
   screen: {
