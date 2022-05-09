@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useState } from "react";
+import React from "react";
 import { ethers } from "ethers";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as config from "../ChainBytesConfig";
@@ -21,24 +21,43 @@ let contract = new ethers.Contract(
 );
 
 export default function PayWorker(props) {
-  const [_workerAddress, onChangeText] = useState(null);
-  const [_paymentAmount, changePaymentAmount] = useState(0);
-  const sendPayment = React.useCallback(async () => {
-    try {
-      const connector = useWalletConnect();
-      await connector.signTransaction({
-        data: "0x",
-        from: "0xbc28Ea04101F03aA7a94C1379bc3AB32E65e62d3",
-        gas: "0x9c40",
-        gasPrice: "0x02540be400",
-        nonce: "0x0114",
-        to: "0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359",
-        value: "0x00",
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }, [connector]);
+  const [_workerAddress, onChangeText] = React.useState(null);
+  const [_paymentAmount, changePaymentAmount] = React.useState(0);
+  const connector = useWalletConnect();
+  const sendPayment = React.useCallback(
+    async (payeeAddress) => {
+      try {
+        let paymentAmount = ethers.utils.parseEther(_paymentAmount);
+        // Override to allow a value to be added when calling contract
+        let overrides = {
+          // To convert Ether to Wei:
+          value: paymentAmount + "", // ether in this case MUST be a string
+        };
+        const provider = new WalletConnectProvider({
+          rpc: {
+            4: config.providerUrl,
+          },
+          connector: connector,
+          qrcode: false,
+        });
+
+        await provider.enable();
+        const ethers_provider = new ethers.providers.Web3Provider(provider);
+        const signer = ethers_provider.getSigner();
+        let contract = new ethers.Contract(
+          config.contractAddress,
+          config.contractAbi,
+          signer
+        );
+        await contract
+          .payWorker(payeeAddress, overrides)
+          .then((result) => console.log(result));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [connector]
+  );
   let address = props.address;
   return (
     <NavigationContainer independent={true}>
@@ -46,16 +65,16 @@ export default function PayWorker(props) {
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
-          placeholder="Address of new Foreman"
+          placeholder="Address of Worker"
         />
         <TextInput
           style={styles.input}
           onChangeText={changePaymentAmount}
-          placeholder="Address of new Foreman"
+          placeholder="Payment amount ETH"
         />
         <TouchableOpacity
           style={styles.signInButton}
-          onPress={() => payWorker(_workerAddress, _paymentAmount)}
+          onPress={() => sendPayment(_workerAddress)}
         ></TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
