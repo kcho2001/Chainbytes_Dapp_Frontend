@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,7 +15,7 @@ const Tabs = ({ route }) => {
   return (
     <Tab.Navigator
       // Starts on Home screen, plus screen options
-      initialRouteName='Home'
+      initialRouteName="Home"
       screenOptions={{
         headerStyle: {
           backgroundColor: "#C4A484",
@@ -41,7 +41,7 @@ const Tabs = ({ route }) => {
       }}
     >
       <Tab.Screen
-      //Scanner tab
+        //Scanner tab
         name="Scanner"
         component={Scanner}
         options={{
@@ -51,7 +51,7 @@ const Tabs = ({ route }) => {
         }}
       ></Tab.Screen>
       <Tab.Screen
-      //Home tab
+        //Home tab
         name="Home"
         component={Home}
         initialParams={{ address: route.params.address }}
@@ -62,7 +62,7 @@ const Tabs = ({ route }) => {
         }}
       ></Tab.Screen>
       <Tab.Screen
-      //Checked in tab, pass null values initially to screen
+        //Checked in tab, pass null values initially to screen
         name="Checked In"
         component={Checked_in}
         initialParams={{ type: null, data: null, new: false }}
@@ -75,7 +75,6 @@ const Tabs = ({ route }) => {
     </Tab.Navigator>
   );
 };
-
 
 // style sheet
 const stlyes = StyleSheet.create({
