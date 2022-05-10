@@ -33,7 +33,7 @@ export default function CreateForeman(props) {
       try {
         const provider = new WalletConnectProvider({
           rpc: {
-            4: config.providerApi,
+            4: config.providerUrl,
           },
           connector: connector,
           qrcode: false,
