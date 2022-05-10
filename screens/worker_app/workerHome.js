@@ -63,22 +63,20 @@ export default function WorkerHomeScreen(props) {
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
         <Text style={styles.mainText}> Hello Worker </Text>
-        <Text style={styles.checkInText}>
-          {" "}
-          Last checked in: {lastCheckedIn}{" "}
-        </Text>
+        <Text style={styles.checkInText}>Last checked in: {lastCheckedIn}</Text>
         <Text style={styles.mainText}>
-          Balance:{" "}
+          Balance:
           <HighlightText
             highlightStyle={{ backgroundColor: "#d3d3d3" }}
             searchWords={["balance.toString()"]}
             textToHighlight="balance.toString()"
           />
         </Text>
-        <TouchableOpacity onPress={() => getLastCheckedIn}>
-          <Text style={styles.checkInText}>
-            Last checked in: {lastCheckedIn}{" "}
-          </Text>{" "}
+        <TouchableOpacity
+          style={styles.buttonStyle}
+          onPress={() => getLastCheckedIn()}
+        >
+          <Text style={styles.buttonTextStyle}> Refresh </Text>
         </TouchableOpacity>
         <Image
           style={styles.image}
@@ -113,5 +111,25 @@ const styles = StyleSheet.create({
   image: {
     height: 350,
     width: 350,
+  },
+  buttonStyle: {
+    backgroundColor: "#3399FF",
+    borderWidth: 0,
+    color: "#FFFFFF",
+    borderColor: "#3399FF",
+    height: 40,
+    alignItems: "center",
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  buttonTextStyle: {
+    color: "#FFFFFF",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
