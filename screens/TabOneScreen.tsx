@@ -61,7 +61,7 @@ export default function TabOneScreen(this: any, { navigation }: RootTabScreenPro
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>ChainBytes Coffee Project</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       {!connector.connected && (
         <TouchableOpacity onPress={connectWallet} style={styles.buttonStyle}>
