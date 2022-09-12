@@ -8,7 +8,6 @@ import "../../global";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-
 // For connecting to the contract
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -24,8 +23,8 @@ export default function Checked_in({ route }) {
   // NB: Handle result in a better way. Check for errors
 
   const check_in_worker = React.useCallback(
-    async ( _workerAddress) => {
-      var date = moment().utcOffset("-04:00").toLocaleString();
+    async (_workerAddress) => {
+      var date = moment().utcOffset("-04:00").format("YYYY-MM-DD hh:mm:ss a");
       const provider = new WalletConnectProvider({
         rpc: {
           4: config.providerUrl,
@@ -85,7 +84,7 @@ export default function Checked_in({ route }) {
       addWorker(route.params.type, route.params.data);
     }
   }
- // check_in_worker("0x6d957F99895211964670976F51420866D66614C3");
+  // check_in_worker("0x6d957F99895211964670976F51420866D66614C3");
   // If there are no workers signed in, display that no workers have signed in
   if (workers.length === 0) {
     return (
