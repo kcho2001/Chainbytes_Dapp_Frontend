@@ -1,6 +1,14 @@
 import { StatusBar } from "expo-status-bar";
+import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Pressable,
+  RefreshControl,
+} from "react-native";
 import WorkerTab from "./worker_app/workerTab.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -9,9 +17,7 @@ import { ethers, getDefaultProvider } from "ethers";
 import Tabs from "./foreman_app/navigation/tabs";
 import FarmTab from "./farm_app/farmTab";
 import * as config from "./ChainBytesConfig.js";
-import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 // import {
@@ -34,56 +40,47 @@ let contract = new ethers.Contract(
   provider
 );
 
-export default function App(props) {
+export default function App(props, { navigation }) {
   const isLoggedIn = false;
   const myAddress = props.address;
+
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        {/* {isLoggedIn ? (
-          <Stack.Screen
-            name="workerHome"
-            component={WorkerHome}
-            options={{ headerBackVisible: false, headerShown: false }}
-          />
-        ) : 
-          <>
-            <Stack.Screen
-              name="Login"
-              component={HomeScreen}
-              options={{
-                headerLeft: (props) => null,
-                headerBackVisible: false,
-              }}
-            />
-          </>
-        )} */}
-        <Stack.Screen
-          name="Login"
-          component={HomeScreen}
-          options={{ headerBackVisible: false, headerShown: false }}
-        />
-        <Stack.Screen
-          name="adminHome"
-          component={Tabs}
-          options={{ headerBackVisible: false, headerShown: false }}
-        />
-        <Stack.Screen
-          name="workerHome"
-          component={WorkerTab}
-          options={{ headerBackVisible: false, headerShown: false }}
-        />
-        <Stack.Screen
-          name="farmHome"
-          component={FarmTab}
-          options={{ headerBackVisible: false, headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Menu"
+        component={HomeScreen}
+        options={{
+          headerBackVisible: false,
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="adminHome"
+        component={Tabs}
+        options={{ headerBackVisible: false, headerShown: false }}
+      />
+      <Stack.Screen
+        name="workerHome"
+        component={WorkerTab}
+        options={{ headerBackVisible: false, headerShown: false }}
+      />
+      <Stack.Screen
+        name="farmHome"
+        component={FarmTab}
+        options={{ headerBackVisible: false, headerShown: false }}
+      />
+    </Stack.Navigator>
   );
 }
 
 const HomeScreen = ({ navigation }) => {
+  const connector = useWalletConnect();
+
+  const killSession = React.useCallback(() => {
+    connector.killSession();
+    navigation.navigate("Root");
+  }, [connector]);
+
   return (
     <View style={styles.screen}>
       <View style={styles.signInBackground}>
@@ -117,6 +114,9 @@ const HomeScreen = ({ navigation }) => {
           }
         >
           <Text style={styles.signInText}>Sign in to Admin</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={killSession} style={styles.signInButton}>
+          <Text style={styles.buttonTextStyle}>Log out</Text>
         </TouchableOpacity>
       </View>
       <StatusBar style="auto" />
