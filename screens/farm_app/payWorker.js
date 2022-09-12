@@ -27,11 +27,15 @@ export default function PayWorker(props) {
   const sendPayment = React.useCallback(
     async (payeeAddress) => {
       try {
-        const paymentAmount = ethers.utils.parseEther(_paymentAmount);
+        // const paymentAmount = ethers.utils
+        //   .parseEther(_paymentAmount)
+        //   .toString();
+        const balance = ethers.utils.parseEther("0.05");
+        const balance2 = balance.toString();
         // Override to allow a value to be added when calling contract
         let overrides = {
           // To convert Ether to Wei:
-          value: paymentAmount.toString(), // ether in this case MUST be a string
+          value: balance2, // ether in this case MUST be a string
         };
         const provider = new WalletConnectProvider({
           rpc: {
