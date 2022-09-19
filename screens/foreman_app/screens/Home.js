@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
 import * as config from "../../ChainBytesConfig";
-import "../../global";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -16,7 +16,8 @@ let contract = new ethers.Contract(
 
 // Returns the home screen, displaying informaiton
 export default function Home({ route }) {
-  const my_address = route.params.address;
+  const connector = useWalletConnect();
+  const my_address = connector.accounts[0];
   const [foreman, setForeman] = useState(true);
   useEffect(() => {
     async function getData() {

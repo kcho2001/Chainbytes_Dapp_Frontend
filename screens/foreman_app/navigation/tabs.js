@@ -6,12 +6,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Home from "../screens/Home";
 import Scanner from "../screens/Scanner";
 import Checked_in from "../screens/Checked_in";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 // creates the tab navigator
 const Tab = createBottomTabNavigator();
 
 // creates the tabs
 const Tabs = ({ route }) => {
+  const connector = useWalletConnect();
   return (
     <Tab.Navigator
       // Starts on Home screen, plus screen options
@@ -54,7 +56,7 @@ const Tabs = ({ route }) => {
         //Home tab
         name="Home"
         component={Home}
-        initialParams={{ address: route.params.address }}
+        initialParams={{ address: connector.accounts[0] }}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"home"} color={color} size={size} />

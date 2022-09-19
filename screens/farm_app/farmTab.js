@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CreateForeman from "./createForeman";
@@ -7,6 +8,7 @@ import PayWorker from "./payWorker";
 const Tab = createBottomTabNavigator();
 
 export default function FarmTab({ route }) {
+  const connector = useWalletConnect();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -24,7 +26,7 @@ export default function FarmTab({ route }) {
     >
       <Tab.Screen
         name="Create Foreman"
-        children={() => <CreateForeman address={route.params.address} />}
+        children={() => <CreateForeman address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"wallet"} color={color} size={size} />
@@ -33,7 +35,7 @@ export default function FarmTab({ route }) {
       />
       <Tab.Screen
         name="Pay Worker"
-        children={() => <PayWorker address={route.params.address} />}
+        children={() => <PayWorker address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"home"} color={color} size={size} />

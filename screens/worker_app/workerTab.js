@@ -5,10 +5,12 @@ import QRWallet from "./qrWallet";
 import WorkerHomeScreen from "./workerHome";
 import WorkCalendar from "./workerCalendar";
 import { ethers } from "ethers";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 const Tab = createBottomTabNavigator();
 
 export default function WorkerTab({ route }) {
+  const connector = useWalletConnect();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -26,7 +28,7 @@ export default function WorkerTab({ route }) {
     >
       <Tab.Screen
         name="QR Wallet"
-        children={() => <QRWallet address={route.params.address} />}
+        children={() => <QRWallet address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"wallet"} color={color} size={size} />
@@ -35,7 +37,7 @@ export default function WorkerTab({ route }) {
       />
       <Tab.Screen
         name="Home"
-        children={() => <WorkerHomeScreen address={route.params.address} />}
+        children={() => <WorkerHomeScreen address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"home"} color={color} size={size} />
@@ -44,7 +46,7 @@ export default function WorkerTab({ route }) {
       />
       <Tab.Screen
         name="Calendar"
-        children={() => <WorkCalendar address={route.params.address} />}
+        children={() => <WorkCalendar address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"calendar"} color={color} size={size} />
