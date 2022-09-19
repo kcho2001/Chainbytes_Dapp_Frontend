@@ -31,7 +31,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import roleNavigation from "../screens/roleNavigation";
 import {
   RootStackParamList,
   RootTabParamList,
@@ -74,10 +74,11 @@ export function RootNavigator() {
       />
       <Stack.Screen
         name="Main Menu"
-        component={TabTwoScreen}
-        options={{
-          headerShown: false,
+        component={roleNavigation}
+        options={({ navigation }) => ({
+          headerShown: true,
           gestureEnabled: false,
+          headerBackVisible: false,
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate("Modal")}
@@ -92,7 +93,7 @@ export function RootNavigator() {
               />
             </Pressable>
           ),
-        }}
+        })}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
