@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import ethereum_address from "ethereum-address";
-import "../../global";
 
 export default function Scanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);

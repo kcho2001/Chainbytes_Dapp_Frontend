@@ -4,7 +4,6 @@ import WorkerItem from "./Extra/workerItem";
 import * as config from "../../ChainBytesConfig.js";
 import { ethers } from "ethers";
 import moment from "moment";
-import "../../global";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
