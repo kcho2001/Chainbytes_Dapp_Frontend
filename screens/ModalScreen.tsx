@@ -15,36 +15,36 @@ const shortenAddress = (address: string) => {
   return ret;
 }
 
-export default function ModalScreen() {
+export default function ModalScreen({navigation}) {
   const connector = useWalletConnect();
   
   const killSession = React.useCallback(() => {
-    return connector.killSession();
+    connector.killSession();
+    navigation.navigate("Root");
   }, [connector]);
 
   return (
-    <View>
-      {!!connector.connected && (
-        <>
-          <View style={styles.container}>
-            <Text style={styles.title}>Modal</Text>
-            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-            <EditScreenInfo path="/screens/ModalScreen.tsx" />
-            <Text>{shortenAddress(connector.accounts[0])}</Text>
-            <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
-              <Text style={styles.buttonTextStyle}>Log out</Text>
-            </TouchableOpacity>
-            {/* Use a light status bar on iOS to account for the black space above the modal */}
-            <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-          </View>
-        </>
-      )}
+    <View style={styles.screen}>
+      <Text style={styles.title}>Currently logged in as:</Text>
+      <Text style={styles.buttonTextStyle}>{shortenAddress(connector.accounts[0])}</Text>
+
+      <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
+        <Text style={styles.buttonTextStyle}>Log out</Text>
+      </TouchableOpacity>
+      {/* Use a light status bar on iOS to account for the black space above the modal */}
+      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingTop: 10,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
