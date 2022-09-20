@@ -82,6 +82,7 @@ export default function CreateForeman(props) {
           style={styles.input}
           onChangeText={onChangeText}
           placeholder="Address of new Foreman"
+          placeholderTextColor="grey"
         />
         <TouchableOpacity
           style={styles.signInButton}

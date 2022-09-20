@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import BatchPay from "./batchPay";
 import CreateForeman from "./createForeman";
 import PayWorker from "./payWorker";
 
@@ -38,10 +39,20 @@ export default function FarmTab({ route }) {
         children={() => <PayWorker address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name={"home"} color={color} size={size} />
+            <Ionicons name={"checkmark-sharp"} color={color} size={size} />
           ),
         }}
       />
+      <Tab.Screen
+        name="Batch Pay"
+        children={() => <BatchPay address={connector.accounts[0]} />}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name={"checkmark-done-sharp"} color={color} size={size}></Ionicons>
+          ),
+        }}
+        >
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

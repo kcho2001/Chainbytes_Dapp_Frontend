@@ -70,16 +70,20 @@ export default function PayWorker(props) {
           style={styles.input}
           onChangeText={onChangeText}
           placeholder="Address of Worker"
+          placeholderTextColor="grey"
         />
         <TextInput
           style={styles.input}
           onChangeText={changePaymentAmount}
           placeholder="Payment amount ETH"
+          placeholderTextColor="grey"
         />
         <TouchableOpacity
           style={styles.signInButton}
           onPress={() => sendPayment(_workerAddress)}
-        ></TouchableOpacity>
+        >
+          <Text style={styles.signInText}>Send Payment</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </NavigationContainer>
   );
@@ -124,5 +128,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     alignItems: "center",
     justifyContent: "center",
+  },
+  signInText: {
+    color: "white",
   },
 });
