@@ -129,4 +129,11 @@ const styles = StyleSheet.create({
   signInText: {
     color: "white",
   },
+  addressText: {
+    color: "#000000",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    fontWeight: "600",
+  }
 });
