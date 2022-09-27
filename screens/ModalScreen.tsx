@@ -25,7 +25,7 @@ export default function ModalScreen({ navigation }) {
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>Currently logged in as:</Text>
-      <Text style={styles.buttonTextStyle}>{shortenAddress(connector.accounts[0])}</Text>
+      <Text style={styles.addressText}>{shortenAddress(connector.accounts[0])}</Text>
       <View style={styles.screen}>
         <View style={styles.signInBackground}>
           <TouchableOpacity
@@ -129,4 +129,8 @@ const styles = StyleSheet.create({
   signInText: {
     color: "white",
   },
+  addressText: {
+    fontSize: 16,
+    padding: 10
+  }
 });

@@ -22,20 +22,16 @@ export default function Home({ route }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function getData() {
-      await contract
-        .isAddressForeman(my_address)
-        .then((result) => {
-          setForeman(result)
-          setLoading(false)
-        });
+      await contract.isForeman(my_address).then((result) => {
+        setForeman(result);
+        setLoading(false);
+      });
     }
     getData();
   }, []);
 
   if (loading) {
-    return (
-      <Text> Loading </Text>
-    )
+    return <Text> Loading </Text>;
   } else {
     return (
       <NavigationContainer independent={true}>

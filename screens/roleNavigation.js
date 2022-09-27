@@ -44,8 +44,9 @@ export default function App(props) {
   return (
     <Stack.Navigator
       screenOptions={{
-        animation: 'none',
-      }} >
+        animation: "none",
+      }}
+    >
       <Stack.Screen
         name="Menu"
         component={HomeScreen}
@@ -57,17 +58,29 @@ export default function App(props) {
       <Stack.Screen
         name="adminHome"
         component={Tabs}
-        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
+        options={{
+          headerBackVisible: false,
+          headerShown: false,
+          gestureEnabled: false,
+        }}
       />
       <Stack.Screen
         name="workerHome"
         component={WorkerTab}
-        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
+        options={{
+          headerBackVisible: false,
+          headerShown: false,
+          gestureEnabled: false,
+        }}
       />
       <Stack.Screen
         name="farmHome"
         component={FarmTab}
-        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
+        options={{
+          headerBackVisible: false,
+          headerShown: false,
+          gestureEnabled: false,
+        }}
       />
     </Stack.Navigator>
   );
@@ -84,52 +97,44 @@ const HomeScreen = ({ navigation }) => {
   const my_address = connector.accounts[0];
   const [Farm, setFarm] = useState(false);
   const [Foreman, setForeman] = useState(false);
-  const [Loading1, setLoading1] = useState(true)
-  const [Loading2, setLoading2] = useState(true)
+  const [Loading1, setLoading1] = useState(true);
+  const [Loading2, setLoading2] = useState(true);
   try {
     useEffect(() => {
       async function getData() {
-        await contract
-          .isAddressFarm(my_address)
-          .then((result) => {
-            setFarm(result)
-            setLoading1(false)
-          });
+        await contract.isFarm(my_address).then((result) => {
+          setFarm(result);
+          setLoading1(false);
+        });
       }
       getData();
     }, []);
     useEffect(() => {
       async function getData() {
-        await contract
-          .isAddressForeman(my_address)
-          .then((result) => {
-            setForeman(result)
-            setLoading2(false)
-          });
+        await contract.isForeman(my_address).then((result) => {
+          setForeman(result);
+          setLoading2(false);
+        });
       }
       getData();
     }, []);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 
   if (Loading1 || Loading2) {
-    return (
-      <Text> Loading </Text>
-    )
+    return <Text> Loading </Text>;
   } else {
     if (Farm) {
-      navigation.navigate("farmHome")
+      navigation.navigate("farmHome");
     } else if (Foreman) {
-      navigation.navigate("adminHome")
+      navigation.navigate("adminHome");
     } else {
-      navigation.navigate("workerHome")
+      navigation.navigate("workerHome");
     }
   }
 
-  return (
-    <Text> Loading </Text>
-  )
+  return <Text> Loading </Text>;
 };
 
 const styles = StyleSheet.create({

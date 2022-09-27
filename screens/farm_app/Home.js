@@ -19,31 +19,26 @@ export default function Home({ route }) {
   const connector = useWalletConnect();
   const my_address = connector.accounts[0];
   const [Farm, setFarm] = useState(true);
-  const [Loading, setLoading] = useState(true)
+  const [Loading, setLoading] = useState(true);
   useEffect(() => {
     async function getData() {
-      await contract
-        .isAddressFarm(my_address)
-        .then((result) => {
-          setFarm(result)
-          setLoading(false)
-        });
+      await contract.isFarm(my_address).then((result) => {
+        setFarm(result);
+        setLoading(false);
+      });
     }
     getData();
   }, []);
 
   if (Loading) {
-    return (<Text> Loading </Text>)
-  }
-  else {
+    return <Text> Loading </Text>;
+  } else {
     return (
       <NavigationContainer independent={true}>
         <SafeAreaView style={styles.screen}>
           <View>
             {Farm && <Text style={styles.mainText}> Hello, Mr.Farm! </Text>}
-            {!Farm && (
-              <Text style={styles.mainText}> You're Not a Farm!</Text>
-            )}
+            {!Farm && <Text style={styles.mainText}> You're Not a Farm!</Text>}
           </View>
           {/**This will display the amount of active workers under the farm */}
           <Text style={styles.smolText}>
@@ -56,10 +51,7 @@ export default function Home({ route }) {
             />
           </Text>
           {/**This will display the amount of active workers under the farm */}
-          <Text style={styles.mainText}>
-            {" "}
-            You have no/# unpaid Workers{" "}
-          </Text>
+          <Text style={styles.mainText}> You have no/# unpaid Workers </Text>
           <View style={styles.imageView}>
             <Image
               style={styles.image}
@@ -68,11 +60,9 @@ export default function Home({ route }) {
               }}
             />
           </View>
-
         </SafeAreaView>
       </NavigationContainer>
     );
-
   }
 }
 
@@ -104,6 +94,6 @@ const styles = StyleSheet.create({
   imageView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
