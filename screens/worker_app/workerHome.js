@@ -32,33 +32,33 @@ export default function WorkerHomeScreen(props) {
   //   }
   // }, [connector]);
   // const balance = getBalance();
-  const getLastCheckedIn = React.useCallback(async () => {
-    try {
-      const provider = new WalletConnectProvider({
-        rpc: {
-          4: config.providerUrl,
-        },
-        connector: connector,
-        qrcode: false,
-      });
+  // const getLastCheckedIn = React.useCallback(async () => {
+  //   try {
+  //     const provider = new WalletConnectProvider({
+  //       rpc: {
+  //         4: config.providerUrl,
+  //       },
+  //       connector: connector,
+  //       qrcode: false,
+  //     });
 
-      await provider.enable();
-      const ethers_provider = new ethers.providers.Web3Provider(provider);
-      const signer = ethers_provider.getSigner();
-      let contract = new ethers.Contract(
-        config.contractAddress,
-        config.contractAbi,
-        signer
-      );
-      await contract.getDaysCheckedIn(address).then((result) => {
-        setCheckedIn(result[0]);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }, [connector]);
+  //     await provider.enable();
+  //     const ethers_provider = new ethers.providers.Web3Provider(provider);
+  //     const signer = ethers_provider.getSigner();
+  //     let contract = new ethers.Contract(
+  //       config.contractAddress,
+  //       config.contractAbi,
+  //       signer
+  //     );
+  //     await contract.getDaysCheckedIn(address).then((result) => {
+  //       setCheckedIn(result[0]);
+  //     });
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, [connector]);
 
-  getLastCheckedIn();
+  // getLastCheckedIn();
   return (
     <NavigationContainer independent={true}>
       <SafeAreaView style={styles.screen}>
@@ -72,19 +72,14 @@ export default function WorkerHomeScreen(props) {
             textToHighlight="balance.toString()"
           />
         </Text>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={() => getLastCheckedIn()}
-        >
-          <Text style={styles.buttonTextStyle}> Refresh </Text>
-        </TouchableOpacity>
         <View style={styles.imageView}>
           <Image
             style={styles.image}
             source={{
               uri: "https://image.shutterstock.com/image-photo/fresh-roasted-coffee-beans-leaves-260nw-1659538030.jpg",
             }}
-          /></View>
+          />
+        </View>
       </SafeAreaView>
     </NavigationContainer>
   );
@@ -95,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 10
+    paddingTop: 10,
   },
   checkInText: {
     fontSize: 15,
@@ -136,6 +131,6 @@ const styles = StyleSheet.create({
   imageView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
