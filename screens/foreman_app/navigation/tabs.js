@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { FontAwesome } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
+import ModalScreen from "../../ModalScreen";
 import Scanner from "../screens/Scanner";
 import Checked_in from "../screens/Checked_in";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 // creates the tab navigator
 const Tab = createBottomTabNavigator();
+
 
 // creates the tabs
 const Tabs = ({ route }) => {
@@ -18,7 +21,24 @@ const Tabs = ({ route }) => {
     <Tab.Navigator
       // Starts on Home screen, plus screen options
       initialRouteName="Home"
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
+        headerShown: true,
+        gestureEnabled: false,
+        headerBackVisible: false,
+        headerRight: () => (
+          <Pressable
+            onPress={() => navigation.navigate("Modal")}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}
+          >
+            <FontAwesome
+              name="info-circle"
+              size={25}
+              style={{ marginRight: 15 }}
+            />
+          </Pressable>
+        ),
         headerStyle: {
           backgroundColor: "#C4A484",
         },
@@ -28,6 +48,7 @@ const Tabs = ({ route }) => {
           fontFamily: "Cochin",
         },
         tabBarShowLabel: false,
+
         // Different tab bar style (uncomment to see)
         /*tabBarStyle: {
                     position: 'absolute',
@@ -40,7 +61,7 @@ const Tabs = ({ route }) => {
                     height: 90,
                     ... stlyes.shadow
                 }*/
-      }}
+      })}
     >
       <Tab.Screen
         //Scanner tab
