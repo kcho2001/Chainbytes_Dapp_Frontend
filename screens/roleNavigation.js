@@ -42,7 +42,10 @@ let contract = new ethers.Contract(
 
 export default function App(props) {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        animation: 'none',
+      }} >
       <Stack.Screen
         name="Menu"
         component={HomeScreen}
@@ -77,47 +80,47 @@ const HomeScreen = ({ navigation }) => {
     connector.killSession();
     navigation.navigate("Root");
   }, [connector]);
-  
+
   const my_address = connector.accounts[0];
   const [Farm, setFarm] = useState(false);
   const [Foreman, setForeman] = useState(false);
   const [Loading1, setLoading1] = useState(true)
   const [Loading2, setLoading2] = useState(true)
-  try{
-  useEffect(() => {
-    async function getData() {
-      await contract
-        .isAddressFarm(my_address)
-        .then((result) => {
-          setFarm(result)
-          setLoading1(false)
-        });
-    }
-    getData();
-  }, []);
-  useEffect(() => {
-    async function getData() {
-      await contract
-        .isAddressForeman(my_address)
-        .then((result) => {
-          setForeman(result)
-          setLoading2(false)
-        });
-    }
-    getData();
-  }, []);
-} catch (e) {
-  console.log(e)
-}
+  try {
+    useEffect(() => {
+      async function getData() {
+        await contract
+          .isAddressFarm(my_address)
+          .then((result) => {
+            setFarm(result)
+            setLoading1(false)
+          });
+      }
+      getData();
+    }, []);
+    useEffect(() => {
+      async function getData() {
+        await contract
+          .isAddressForeman(my_address)
+          .then((result) => {
+            setForeman(result)
+            setLoading2(false)
+          });
+      }
+      getData();
+    }, []);
+  } catch (e) {
+    console.log(e)
+  }
 
-  if(Loading1 || Loading2){
-    return(
+  if (Loading1 || Loading2) {
+    return (
       <Text> Loading </Text>
     )
   } else {
-    if(Farm){
+    if (Farm) {
       navigation.navigate("farmHome")
-    } else if (Foreman){
+    } else if (Foreman) {
       navigation.navigate("adminHome")
     } else {
       navigation.navigate("workerHome")

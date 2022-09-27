@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BatchPay from "./batchPay";
 import CreateForeman from "./createForeman";
@@ -14,7 +15,24 @@ export default function FarmTab({ route }) {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
+        headerShown: true,
+        gestureEnabled: false,
+        headerBackVisible: false,
+        headerRight: () => (
+          <Pressable
+            onPress={() => navigation.navigate("Modal")}
+            style={({ pressed }) => ({
+              opacity: pressed ? 0.5 : 1,
+            })}
+          >
+            <FontAwesome
+              name="info-circle"
+              size={25}
+              style={{ marginRight: 15 }}
+            />
+          </Pressable>
+        ),
         headerStyle: {
           backgroundColor: "#C4A484",
         },
@@ -24,7 +42,20 @@ export default function FarmTab({ route }) {
           fontFamily: "Cochin",
         },
         tabBarShowLabel: false,
-      }}
+
+        // Different tab bar style (uncomment to see)
+        /*tabBarStyle: {
+                    position: 'absolute',
+                    bottom: 25,
+                    left: 20,
+                    right: 20,
+                    elevation: 0,
+                    backgroundColor: "#ffffff",
+                    borderRadius: 100,
+                    height: 90,
+                    ... stlyes.shadow
+                }*/
+      })}
     >
       <Tab.Screen
         name="Create Foreman"

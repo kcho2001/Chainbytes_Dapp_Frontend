@@ -78,12 +78,13 @@ export default function WorkerHomeScreen(props) {
         >
           <Text style={styles.buttonTextStyle}> Refresh </Text>
         </TouchableOpacity>
-        <Image
-          style={styles.image}
-          source={{
-            uri: "https://image.shutterstock.com/image-photo/fresh-roasted-coffee-beans-leaves-260nw-1659538030.jpg",
-          }}
-        />
+        <View style={styles.imageView}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: "https://image.shutterstock.com/image-photo/fresh-roasted-coffee-beans-leaves-260nw-1659538030.jpg",
+            }}
+          /></View>
       </SafeAreaView>
     </NavigationContainer>
   );
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 80,
+    paddingTop: 10
   },
   checkInText: {
     fontSize: 15,
@@ -132,4 +133,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  imageView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });

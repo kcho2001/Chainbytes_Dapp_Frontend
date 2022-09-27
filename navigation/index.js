@@ -76,7 +76,7 @@ export function RootNavigator() {
         name="Main Menu"
         component={roleNavigation}
         options={({ navigation }) => ({
-          headerShown: true,
+          headerShown: false,
           gestureEnabled: false,
           headerBackVisible: false,
           headerRight: () => (

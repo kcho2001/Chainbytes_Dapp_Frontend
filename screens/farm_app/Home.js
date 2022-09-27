@@ -40,27 +40,35 @@ export default function Home({ route }) {
       <NavigationContainer independent={true}>
         <SafeAreaView style={styles.screen}>
           <View>
-            {Farm && <Text style={styles.mainText}> Hello, Farm! </Text>}
+            {Farm && <Text style={styles.mainText}> Hello, Mr.Farm! </Text>}
             {!Farm && (
-              <Text style={styles.mainText}> Hello, Not Farm!</Text>
+              <Text style={styles.mainText}> You're Not a Farm!</Text>
             )}
           </View>
-          <Text style={styles.smolText}>{my_address}</Text>
-          <Text style={styles.mainText}>
+          {/**This will display the amount of active workers under the farm */}
+          <Text style={styles.smolText}>
             {" "}
-            Balance:{" "}
+            Active Workers:{" "}
             <HighlightText
               highlightStyle={{ backgroundColor: "#d3d3d3" }}
-              searchWords={["1000 ETH"]}
-              textToHighlight="1000 ETH"
+              searchWords={["1000"]}
+              textToHighlight="1000"
             />
           </Text>
-          <Image
-            style={styles.image}
-            source={{
-              uri: "https://www.mcall.com/resizer/Yaa9q9hboZ0NjcEmlq4SfPDBoFU=/1200x795/top/cloudfront-us-east-1.images.arcpublishing.com/tronc/JUW4JCLFKBGRND33USOZQ4IUF4.jpg",
-            }}
-          />
+          {/**This will display the amount of active workers under the farm */}
+          <Text style={styles.mainText}>
+            {" "}
+            You have no/# unpaid Workers{" "}
+          </Text>
+          <View style={styles.imageView}>
+            <Image
+              style={styles.image}
+              source={{
+                uri: "https://ictcoffee.com/wp-content/uploads/2018/12/coffee-orgin-el-salvador-farm.jpg",
+              }}
+            />
+          </View>
+
         </SafeAreaView>
       </NavigationContainer>
     );
@@ -83,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   smolText: {
-    fontSize: 10,
+    fontSize: 15,
     color: "black",
     paddingBottom: 5,
     paddingTop: 0,
@@ -93,4 +101,9 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
   },
+  imageView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
