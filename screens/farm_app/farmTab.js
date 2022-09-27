@@ -5,8 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import BatchPay from "./batchPay";
 import CreateForeman from "./createForeman";
-import PayWorker from "./payWorker";
-import HomeTab from "./Home"
+import HomeTab from "./Home";
 
 const Tab = createBottomTabNavigator();
 
@@ -78,25 +77,18 @@ export default function FarmTab({ route }) {
         }}
       ></Tab.Screen>
       <Tab.Screen
-        name="Pay Worker"
-        children={() => <PayWorker address={connector.accounts[0]} />}
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name={"checkmark-sharp"} color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Batch Pay"
         children={() => <BatchPay address={connector.accounts[0]} />}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name={"checkmark-done-sharp"} color={color} size={size}></Ionicons>
+            <Ionicons
+              name={"checkmark-done-sharp"}
+              color={color}
+              size={size}
+            ></Ionicons>
           ),
         }}
-        >
-      </Tab.Screen>
-      
+      ></Tab.Screen>
     </Tab.Navigator>
   );
 }
