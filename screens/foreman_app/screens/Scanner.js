@@ -3,10 +3,22 @@ import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import ethereum_address from "ethereum-address";
 
-export default function Scanner({ navigation }) {
+export default function Scanner({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
+  const [active, setActive] = useState(true)
+
+  useEffect(() => navigation.addListener('state', (state) => {
+    let x = state.data.state.history.length
+    if(x === 2){
+      setActive(false)
+    } else if (x === 1) {
+      setActive(true)
+    } else {
+      console.log("error: state.data.state.history.length showed length greater != 1 or 2: " + x)
+    }
+    }), []  )
 
   const askForCameraPermission = () => {
     (async () => {
@@ -56,7 +68,7 @@ export default function Scanner({ navigation }) {
     );
   }
 
-  if (hasPermission === false) {
+  if (hasPermission === false || active === false) {
     return (
       <View style={styles.container}>
         <Text style={{ margin: 10 }}>No access to camera</Text>
@@ -69,7 +81,7 @@ export default function Scanner({ navigation }) {
   }
 
   // Return the View
-  if (hasPermission === true) {
+  if (hasPermission === true && active === true) {
     return (
       <View style={styles.container}>
         <View style={styles.barcodebox}>
@@ -119,3 +131,4 @@ const styles = StyleSheet.create({
     bottom: 25,
   },
 });
+
