@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -54,17 +54,17 @@ export default function App(props) {
       <Stack.Screen
         name="adminHome"
         component={Tabs}
-        options={{ headerBackVisible: false, headerShown: false }}
+        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
       />
       <Stack.Screen
         name="workerHome"
         component={WorkerTab}
-        options={{ headerBackVisible: false, headerShown: false }}
+        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
       />
       <Stack.Screen
         name="farmHome"
         component={FarmTab}
-        options={{ headerBackVisible: false, headerShown: false }}
+        options={{ headerBackVisible: false, headerShown: false, gestureEnabled: false }}
       />
     </Stack.Navigator>
   );
@@ -77,36 +77,56 @@ const HomeScreen = ({ navigation }) => {
     connector.killSession();
     navigation.navigate("Root");
   }, [connector]);
+  
+  const my_address = connector.accounts[0];
+  const [Farm, setFarm] = useState(false);
+  const [Foreman, setForeman] = useState(false);
+  const [Loading1, setLoading1] = useState(true)
+  const [Loading2, setLoading2] = useState(true)
+  try{
+  useEffect(() => {
+    async function getData() {
+      await contract
+        .isAddressFarm(my_address)
+        .then((result) => {
+          setFarm(result)
+          setLoading1(false)
+        });
+    }
+    getData();
+  }, []);
+  useEffect(() => {
+    async function getData() {
+      await contract
+        .isAddressForeman(my_address)
+        .then((result) => {
+          setForeman(result)
+          setLoading2(false)
+        });
+    }
+    getData();
+  }, []);
+} catch (e) {
+  console.log(e)
+}
+
+  if(Loading1 || Loading2){
+    return(
+      <Text> Loading </Text>
+    )
+  } else {
+    if(Farm){
+      navigation.navigate("farmHome")
+    } else if (Foreman){
+      navigation.navigate("adminHome")
+    } else {
+      navigation.navigate("workerHome")
+    }
+  }
 
   return (
-    <View style={styles.screen}>
-      <View style={styles.signInBackground}>
-        <TouchableOpacity
-          style={styles.signInButton}
-          onPress={() => navigation.navigate("farmHome")}
-        >
-          <Text style={styles.signInText}>Sign in to Farm</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signInButton}
-          onPress={() => navigation.navigate("workerHome")}
-        >
-          <Text style={styles.signInText}>Sign in to Worker</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.signInButton}
-          onPress={() => navigation.navigate("adminHome")}
-        >
-          <Text style={styles.signInText}>Sign in to Admin</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={killSession} style={styles.signInButton}>
-          <Text style={styles.signInText}>Log out</Text>
-        </TouchableOpacity>
-      </View>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Text> Loading </Text>
+  )
 };
 
 const styles = StyleSheet.create({

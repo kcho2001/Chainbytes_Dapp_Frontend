@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
-import * as config from "../../ChainBytesConfig";
+import * as config from "../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
@@ -18,32 +18,31 @@ let contract = new ethers.Contract(
 export default function Home({ route }) {
   const connector = useWalletConnect();
   const my_address = connector.accounts[0];
-  const [foreman, setForeman] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [Farm, setFarm] = useState(true);
+  const [Loading, setLoading] = useState(true)
   useEffect(() => {
     async function getData() {
       await contract
-        .isAddressForeman(my_address)
+        .isAddressFarm(my_address)
         .then((result) => {
-          setForeman(result)
+          setFarm(result)
           setLoading(false)
         });
     }
     getData();
   }, []);
 
-  if (loading) {
-    return (
-      <Text> Loading </Text>
-    )
-  } else {
+  if (Loading) {
+    return (<Text> Loading </Text>)
+  }
+  else {
     return (
       <NavigationContainer independent={true}>
         <SafeAreaView style={styles.screen}>
           <View>
-            {foreman && <Text style={styles.mainText}> Hello, Foreman! </Text>}
-            {!foreman && (
-              <Text style={styles.mainText}> Hello, Not Foreman!</Text>
+            {Farm && <Text style={styles.mainText}> Hello, Farm! </Text>}
+            {!Farm && (
+              <Text style={styles.mainText}> Hello, Not Farm!</Text>
             )}
           </View>
           <Text style={styles.smolText}>{my_address}</Text>
@@ -65,6 +64,7 @@ export default function Home({ route }) {
         </SafeAreaView>
       </NavigationContainer>
     );
+
   }
 }
 
