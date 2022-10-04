@@ -50,7 +50,7 @@ export default function Scanner({ navigation, route }) {
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ type, data }) => {
     if (ethereum_address.isAddress(data)) {
-      navigation.navigate("Checked In", { type: type, data: data, new: true });
+      navigation.navigate("Batch Check In", { type: type, data: data, new: true });
     } else {
       notAddress();
     }

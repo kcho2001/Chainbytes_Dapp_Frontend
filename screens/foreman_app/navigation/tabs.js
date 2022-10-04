@@ -5,9 +5,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
-import ModalScreen from "../../ModalScreen";
 import Scanner from "../screens/Scanner";
 import Checked_in from "../screens/Checked_in";
+import BatchCheckIn from "../screens/Batch_Check_in"
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 // creates the tab navigator
@@ -84,10 +84,21 @@ const Tabs = ({ route }) => {
           ),
         }}
       ></Tab.Screen>
-      <Tab.Screen
+      {/* <Tab.Screen
         //Checked in tab, pass null values initially to screen
         name="Checked In"
         component={Checked_in}
+        initialParams={{ type: null, data: null, new: false }}
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name={"checkbox"} color={color} size={size} />
+          ),
+        }}
+      ></Tab.Screen> */}
+      <Tab.Screen
+        //Checked in tab, pass null values initially to screen
+        name="Batch Check In"
+        component={BatchCheckIn}
         initialParams={{ type: null, data: null, new: false }}
         options={{
           tabBarIcon: ({ size, color }) => (
