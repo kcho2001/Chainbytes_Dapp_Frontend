@@ -178,7 +178,7 @@ export const contractAbi = [
   },
 ];
 
-export const contractAddress = "0x9EbbB0D9c378bf5E6B9c334a5948De49EE4F61Af";
+export const contractAddress = "0xf0db1d758b01D1549f48FE18D0B0733748CdCF80";
 
 export const providerUrl =
-  "https://eth-rinkeby.alchemyapi.io/v2/CSeNZPINOezoRZ0O-BzMthJzvOYD5ZUO";
+  "https://eth-goerli.g.alchemy.com/v2/eKlYL5JTF_h_t0YfnlsRfqyGu4avTfXM";
