@@ -11,7 +11,7 @@ export default function WorkerItem({ item, pressHandler }) {
 
 export function WorkerCheckinItem({ item, pressHandler }) {
   return (
-    <TouchableOpacity onPress={() => pressHandler(item.text)}>
+    <TouchableOpacity onPress={() => pressHandler(item)}>
       <Text style={styles.item}>
         {shortenAddress(item.id)}: {item.daysUnpaid}
       </Text>
