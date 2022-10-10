@@ -40,53 +40,7 @@ let contract = new ethers.Contract(
   provider
 );
 
-export default function App(props) {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        animation: "none",
-      }}
-    >
-      <Stack.Screen
-        name="Menu"
-        component={HomeScreen}
-        options={{
-          headerBackVisible: false,
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="adminHome"
-        component={Tabs}
-        options={{
-          headerBackVisible: false,
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      />
-      <Stack.Screen
-        name="workerHome"
-        component={WorkerTab}
-        options={{
-          headerBackVisible: false,
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      />
-      <Stack.Screen
-        name="farmHome"
-        component={FarmTab}
-        options={{
-          headerBackVisible: false,
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-const HomeScreen = ({ navigation }) => {
+export default function App({ navigation }) {
   const connector = useWalletConnect();
 
   const killSession = React.useCallback(() => {
@@ -125,17 +79,57 @@ const HomeScreen = ({ navigation }) => {
   if (Loading1 || Loading2) {
     return <Text> Loading </Text>;
   } else {
-    if (Farm) {
-      navigation.navigate("farmHome");
-    } else if (Foreman) {
-      navigation.navigate("adminHome");
-    } else {
-      navigation.navigate("workerHome");
-    }
+    // Stack Navigator is created using a protected routes framework
+    // Protected routes flow is defined here: https://reactnavigation.org/docs/auth-flow/
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          animation: "none",
+        }}
+      >
+        {Farm == true && (
+          <>
+            <Stack.Screen
+              name="farmHome"
+              component={FarmTab}
+              options={{
+                headerBackVisible: false,
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+          </>
+        )}
+        {Foreman == true && (
+          <>
+            <Stack.Screen
+              name="adminHome"
+              component={Tabs}
+              options={{
+                headerBackVisible: false,
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+          </>
+        )}
+        {!Farm && !Foreman && (
+          <>
+            <Stack.Screen
+              name="workerHome"
+              component={WorkerTab}
+              options={{
+                headerBackVisible: false,
+                headerShown: false,
+                gestureEnabled: false,
+              }}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    );
   }
-
-  return <Text> Loading </Text>;
-};
+}
 
 const styles = StyleSheet.create({
   screen: {
