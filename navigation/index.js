@@ -60,45 +60,66 @@ export default function Navigation({ colorScheme } = ColorSchemeName) {
 const Stack = createNativeStackNavigator();
 
 export function RootNavigator() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Root"
-        component={LogInScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Screen
-        name="Main Menu"
-        component={roleNavigation}
-        options={({ navigation }) => ({
-          headerShown: false,
-          gestureEnabled: false,
-          headerBackVisible: false,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Modal")}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
-      />
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+  const connector = useWalletConnect();
+
+  // Based on whether the user is connected or not will determine if they can access certain screens.
+  // This follows the protected routes practice defined: https://reactnavigation.org/docs/auth-flow/
+  return connector.connected == false ? (
+    <>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Root"
+          component={LogInScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NotFound"
+          component={NotFoundScreen}
+          options={{ title: "Oops!" }}
+        />
+      </Stack.Navigator>
+    </>
+  ) : (
+    <>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main Menu"
+          component={roleNavigation}
+          options={({ navigation }) => ({
+            headerShown: false,
+            gestureEnabled: false,
+            headerBackVisible: false,
+            headerRight: () => (
+              <Pressable
+                onPress={() => navigation.navigate("Modal")}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.5 : 1,
+                })}
+              >
+                <FontAwesome
+                  name="info-circle"
+                  size={25}
+                  style={{ marginRight: 15 }}
+                />
+              </Pressable>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="Root"
+          component={LogInScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NotFound"
+          component={NotFoundScreen}
+          options={{ title: "Oops!" }}
+        />
+        <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen name="Modal" component={ModalScreen} />
+        </Stack.Group>
+      </Stack.Navigator>
+    </>
   );
 }
 
@@ -115,25 +136,31 @@ function LogInScreen({ navigation }) {
   }, [connector]);
 
   return (
-    <NavigationContainer independent={true}>
-      <View style={styles.container}>
-        <Text style={styles.title}>ChainBytes Coffee Project</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        {!connector.connected && (
-          <TouchableOpacity onPress={connectWallet} style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>Connect a Wallet</Text>
-          </TouchableOpacity>
-        )}
-        {!!connector.connected &&
-          navigation.navigate("Main Menu", {
-            navigation: { navigation },
-          })}
-      </View>
-    </NavigationContainer>
+    <>
+      {!!connector.connected &&
+        navigation.navigate("Main Menu", {
+          navigation: { navigation },
+        })}
+      {!connector.connected && (
+        <NavigationContainer independent={true}>
+          <View style={styles.container}>
+            <Text style={styles.title}>ChainBytes Coffee Project</Text>
+            <View
+              style={styles.separator}
+              lightColor="#eee"
+              darkColor="rgba(255,255,255,0.1)"
+            />
+
+            <TouchableOpacity
+              onPress={connectWallet}
+              style={styles.buttonStyle}
+            >
+              <Text style={styles.buttonTextStyle}>Connect a Wallet</Text>
+            </TouchableOpacity>
+          </View>
+        </NavigationContainer>
+      )}
+    </>
   );
 }
 
