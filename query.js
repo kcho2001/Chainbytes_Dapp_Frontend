@@ -1,7 +1,6 @@
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import React from "react";
 import { AppRegistry } from "react-native";
-import { app } from "./App";
 
 // Initialize Apollo Client
 export const client = new ApolloClient({
