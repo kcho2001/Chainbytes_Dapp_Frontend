@@ -115,7 +115,7 @@ export function RootNavigator() {
           component={NotFoundScreen}
           options={{ title: "Oops!" }}
         />
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Group screenOptions={{ presentation: "modal", headerShown: false }}>
           <Stack.Screen name="Modal" component={ModalScreen} />
         </Stack.Group>
       </Stack.Navigator>

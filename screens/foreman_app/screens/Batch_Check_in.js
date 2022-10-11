@@ -26,13 +26,14 @@ export default function Checked_in({ route }) {
     async (_workerAddress) => {
       var date = moment().utcOffset("-04:00").format("YYYY-MM-DD hh:mm:ss a");
       var workers2 = []
-      for(const worker of _workerAddress){
+      for (const worker of _workerAddress) {
         workers2.push(worker.text)
       }
       const provider = new WalletConnectProvider({
         rpc: {
-          4: config.providerUrl,
+          5: config.providerUrl,
         },
+        chainId: 5,
         connector: connector,
         qrcode: false,
       });
@@ -50,8 +51,10 @@ export default function Checked_in({ route }) {
         await contract
           .checkIn(workers2, date)
           .then((result) => {
-            console.log(workers.length + " workers signed in at " + date)
-            setWorkers([])
+            console.log(workers2.length + " workers signed in at " + date)
+            setWorkers((prevWorkers) => {
+              return prevWorkers.filter((worker) => worker.text == worker.key);
+            });
             setLoading(false)
           });
       } catch (e) {
