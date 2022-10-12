@@ -14,6 +14,15 @@ let contract = new ethers.Contract(
   provider
 );
 
+const shortenAddress = (address) => {
+  global.myAddress = address;
+  let ret = `${address.slice(0, 6)}...${address.slice(
+    address.length - 4,
+    address.length
+  )}`;
+  return ret;
+}
+
 // Returns the home screen, displaying informaiton
 export default function Home({ route }) {
   const connector = useWalletConnect();
@@ -39,26 +48,30 @@ export default function Home({ route }) {
           <View>
             {foreman && <Text style={styles.mainText}> Hello, Foreman! </Text>}
             {!foreman && (
-              <Text style={styles.mainText}> Hello, Not Foreman!</Text>
+              <Text style={styles.mainText}> Hello, Not Foreman! You shouldn't be here</Text>
             )}
           </View>
-          <Text style={styles.smolText}>{my_address}</Text>
-          <Text style={styles.mainText}>
-            {" "}
-            Balance:{" "}
-            <HighlightText
-              highlightStyle={{ backgroundColor: "#d3d3d3" }}
-              searchWords={["1000 ETH"]}
-              textToHighlight="1000 ETH"
-            />
-          </Text>
+          <View>
+            <Text style={styles.smolText}>Address: {shortenAddress(my_address)}</Text>
+            <Text style={styles.mainText}>
+              {" "}
+              Balance:{" "}
+              <HighlightText
+                highlightStyle={{ backgroundColor: "#d3d3d3" }}
+                searchWords={["1000 ETH"]}
+                textToHighlight="1000 ETH"
+              />
+            </Text>
+          </View>
+        </SafeAreaView>
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
           <Image
             style={styles.image}
             source={{
               uri: "https://www.mcall.com/resizer/Yaa9q9hboZ0NjcEmlq4SfPDBoFU=/1200x795/top/cloudfront-us-east-1.images.arcpublishing.com/tronc/JUW4JCLFKBGRND33USOZQ4IUF4.jpg",
             }}
           />
-        </SafeAreaView>
+          </View>
       </NavigationContainer>
     );
   }
@@ -66,10 +79,9 @@ export default function Home({ route }) {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingTop: 10,
+    paddingTop: 10
   },
   mainText: {
     fontSize: 20,
@@ -89,4 +101,9 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
   },
+  imageView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });

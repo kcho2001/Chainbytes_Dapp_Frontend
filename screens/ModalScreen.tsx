@@ -3,7 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
+import QRCode from "react-native-qrcode-svg";
 import { Text, View } from '../components/Themed';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const shortenAddress = (address: string) => {
   global.myAddress = address;
@@ -52,6 +54,9 @@ export default function ModalScreen({ navigation }) {
             <Text style={styles.buttonTextStyle}>Log out</Text>
           </TouchableOpacity>
         </View>
+        <SafeAreaView style={styles.container2}>
+          <QRCode size={200} value={connector.accounts[0]} />
+        </SafeAreaView>
         <StatusBar style="auto" />
       </View>
       <View>
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
     marginLeft: 40,
     marginTop: 10,
-    padding: 15,
+    padding: 1,
     backgroundColor: "#1e140a",
     borderRadius: 10,
     borderWidth: 1,
@@ -132,5 +137,11 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 16,
     padding: 10
-  }
+  }, 
+  container2: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 20
+  },
 });
