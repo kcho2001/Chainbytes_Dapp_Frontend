@@ -6,7 +6,6 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
 import Scanner from "../screens/Scanner";
-import Checked_in from "../screens/Checked_in";
 import BatchCheckIn from "../screens/Batch_Check_in"
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
@@ -40,12 +39,12 @@ const Tabs = ({ route }) => {
           </Pressable>
         ),
         headerStyle: {
-          backgroundColor: "#C4A484",
+          backgroundColor: "white",
         },
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: "800",
-          fontFamily: "Cochin",
+          fontFamily: "HelveticaNeue-Bold",
         },
         tabBarShowLabel: false,
 

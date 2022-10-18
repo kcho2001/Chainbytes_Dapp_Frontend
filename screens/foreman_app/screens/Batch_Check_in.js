@@ -7,6 +7,16 @@ import moment from "moment";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
+let checkIn = 0;
+
+const setCheckIn = (num) => {
+  checkIn += num;
+}
+
+export function checkedIn() {
+  return checkIn;
+}
+
 // For connecting to the contract
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -52,6 +62,7 @@ export default function Checked_in({ route }) {
           .checkIn(workers2, date)
           .then((result) => {
             console.log(workers2.length + " workers signed in at " + date)
+            setCheckIn(workers2.length)
             setWorkers((prevWorkers) => {
               return prevWorkers.filter((worker) => worker.text == worker.key);
             });

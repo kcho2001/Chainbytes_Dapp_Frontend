@@ -6,6 +6,7 @@ import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
 import * as config from "../../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { checkedIn } from "./Batch_Check_in";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -29,6 +30,7 @@ export default function Home({ route }) {
   const my_address = connector.accounts[0];
   const [foreman, setForeman] = useState(false);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     async function getData() {
       await contract.isForeman(my_address).then((result) => {
@@ -43,18 +45,16 @@ export default function Home({ route }) {
     return <Text> Loading </Text>;
   } else {
     return (
-      <NavigationContainer independent={true}>
+      <NavigationContainer independent={true} style={{ backgroundColor: 'white' }}>
         <SafeAreaView style={styles.screen}>
-          <View>
-            {foreman && <Text style={styles.mainText}> Hello, Foreman! </Text>}
+          <View style={styles.mainContainer}>
+            {foreman && <Text style={styles.mainText}>Hello, {shortenAddress(my_address)} </Text>}
             {!foreman && (
               <Text style={styles.mainText}> Hello, Not Foreman! You shouldn't be here</Text>
             )}
           </View>
-          <View>
-            <Text style={styles.smolText}>Address: {shortenAddress(my_address)}</Text>
-            <Text style={styles.mainText}>
-              {" "}
+          <View style={styles.subContainer}>
+            <Text style={styles.subText}>
               Balance:{" "}
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
@@ -63,15 +63,20 @@ export default function Home({ route }) {
               />
             </Text>
           </View>
+          <View style={styles.subContainer}>
+            <Text style={styles.subText}>
+              You have checked in {checkedIn() != 0 && checkedIn() || 'no'} {checkedIn() != 1 && 'workers' || 'worker'} today
+            </Text>
+          </View>
         </SafeAreaView>
-          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+        <View style={styles.imageView}>
           <Image
             style={styles.image}
             source={{
               uri: "https://www.mcall.com/resizer/Yaa9q9hboZ0NjcEmlq4SfPDBoFU=/1200x795/top/cloudfront-us-east-1.images.arcpublishing.com/tronc/JUW4JCLFKBGRND33USOZQ4IUF4.jpg",
             }}
           />
-          </View>
+        </View>
       </NavigationContainer>
     );
   }
@@ -79,16 +84,38 @@ export default function Home({ route }) {
 
 const styles = StyleSheet.create({
   screen: {
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "flex-start",
-    paddingTop: 10
+    width: '100%',
+    //backgroundColor: 'green',
+  },
+  mainContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingLeft: 5,
+  },
+  subContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingLeft: 15
   },
   mainText: {
-    fontSize: 20,
+    fontSize: 30,
     color: "black",
     paddingBottom: 5,
     paddingTop: 0,
     marginTop: 0,
+    fontFamily: "HelveticaNeue-Bold",
+  },
+  subText: {
+    fontSize: 18,
+    color: "black",
+    paddingBottom: 5,
+    paddingTop: 0,
+    marginTop: 0,
+    fontFamily: "HelveticaNeue-Bold",
   },
   smolText: {
     fontSize: 10,
@@ -100,10 +127,13 @@ const styles = StyleSheet.create({
   image: {
     height: 350,
     width: 350,
+    borderRadius: 40
   },
   imageView: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    //backgroundColor: 'red',
+    paddingTop: 20
   }
 });
