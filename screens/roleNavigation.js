@@ -42,6 +42,12 @@ let contract = new ethers.Contract(
 
 export default function App({ navigation }) {
   const connector = useWalletConnect();
+  async function getBalance() {
+    await provider.getBalance(connector.accounts[0]).then((result) => {
+      console.log(ethers.utils.formatEther(result));
+    });
+  }
+  getBalance();
 
   const killSession = React.useCallback(() => {
     connector.killSession();
