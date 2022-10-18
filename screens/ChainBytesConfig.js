@@ -67,9 +67,9 @@ export const contractAbi = [
       },
       {
         indexed: false,
-        internalType: "address",
+        internalType: "address[]",
         name: "worker",
-        type: "address",
+        type: "address[]",
       },
       { indexed: false, internalType: "string", name: "date", type: "string" },
     ],
@@ -87,15 +87,15 @@ export const contractAbi = [
       },
       {
         indexed: false,
-        internalType: "address",
+        internalType: "address[]",
         name: "worker",
-        type: "address",
+        type: "address[]",
       },
       {
         indexed: false,
-        internalType: "uint256",
+        internalType: "uint256[]",
         name: "amount",
-        type: "uint256",
+        type: "uint256[]",
       },
       { indexed: false, internalType: "string", name: "date", type: "string" },
     ],
@@ -178,7 +178,7 @@ export const contractAbi = [
   },
 ];
 
-export const contractAddress = "0xf0db1d758b01D1549f48FE18D0B0733748CdCF80";
+export const contractAddress = "0xD260302a241A2CFBc1493676b4fA3f365870De59";
 
 export const providerUrl =
   "https://eth-goerli.g.alchemy.com/v2/eKlYL5JTF_h_t0YfnlsRfqyGu4avTfXM";
