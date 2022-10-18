@@ -1,4 +1,3 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import {
@@ -10,96 +9,114 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
-import { SafeAreaView } from "react-native-safe-area-context";
 import * as config from "../ChainBytesConfig";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import {
-  WorkerItem,
+import WorkerItem, {
   WorkerCheckinItem,
 } from "../foreman_app/screens/Extra/workerItem";
 import { useQuery } from "@apollo/client";
 import * as query from "../../query";
+import moment from "moment";
 
 export default function BatchPay() {
-  const [loading, setLoading] = useState(false);
-  const [workers, setWorkers] = useState([{ id: "0x", daysUnpaid: 0 }]);
+  //Rate is bound to change depending on how much the workers should be paid (amount in Wei)
+  const rate = 10000;
+  const [workers, setWorkers] = useState([]);
 
-  //   Removes worker from worker array to display
-  // const removeWorker = (key) => {
-  //   setWorkers((prevWorkers) => {
-  //     return prevWorkers.filter((worker) => worker.id != key.id);
-  //   });
-  // };
-  // const removeWorker = React.useCallback(
-  //   (key) => {
-  //     setWorkers((prevWorkers) => {
-  //       return prevWorkers.filter((worker) => worker.id != key.id);
-  //     });
-  //   },
-  //   [workers]
-  // );
+  const handleRefresh = () => {
+    // manually refetch data
+    refetch();
+  };
 
-  // // Adds worker to worker array
-  // const addWorker = (type, data) => {
-  //   setWorkers((prevWorkers) => {
-  //     return [
-  //       { type: type, text: data, key: Math.random().toString() },
-  //       ...prevWorkers,
-  //     ];
-  //   });
-  // };
-
-  useEffect(function get_checkins() {
-    const { loading2, error, data } = useQuery(query.GET_CHECKINS);
-    if (loading2) return "Loading...";
-    if (error) return `Error! ${error.message}`;
-    const workers2 = [];
-    for (let i = 0; i < data.checkIns.length; i++) {
-      workers2.push({
-        id: data.checkIns[i].workerCheckedIn.id,
-        daysUnpaid: data.checkIns[i].workerCheckedIn.daysUnpaid,
-      });
-    }
-    // return workers;
-    setWorkers(workers2);
-    setLoading(false);
+  const { loading, error, data, refetch } = useQuery(query.GET_CHECKINS, {
+    onCompleted: () => {
+      setWorkers(data.checkIns);
+    },
+    notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) {
-    return <Text>loading...</Text>;
-  } else {
-    if (workers.length === 0) {
-      return (
+  const removeWorker = (key) => {
+    setWorkers((prevWorkers) => {
+      return prevWorkers.filter(
+        (worker) => worker.workerCheckedIn.id != key.id
+      );
+    });
+    // setBalance((prevBalance) => {
+    //   return prevBalance - key.daysUnpaid * rate;
+    // });
+  };
+
+  const connector = useWalletConnect();
+
+  const batchPay = React.useCallback(async () => {
+    try {
+      var date = moment().utcOffset("-04:00").format("YYYY-MM-DD hh:mm:ss a");
+      const provider = new WalletConnectProvider({
+        rpc: {
+          5: config.providerUrl,
+        },
+        chainId: 5,
+        connector: connector,
+        qrcode: false,
+      });
+
+      await provider.enable();
+      const ethers_provider = new ethers.providers.Web3Provider(provider);
+      const signer = ethers_provider.getSigner();
+      let contract = new ethers.Contract(
+        config.contractAddress,
+        config.contractAbi,
+        signer
+      );
+      let addresses = [];
+      let balances = [];
+      let balance = 0;
+
+      for (let i = 0; i < workers.length; i++) {
+        addresses.push(workers[i].workerCheckedIn.id);
+        balances.push(workers[i].workerCheckedIn.daysUnpaid * rate);
+        balance += workers[i].workerCheckedIn.id * rate;
+      }
+
+      // Override to allow a value to be added when calling contract
+      let overrides = {
+        // To convert Ether to Wei:
+        value: balance, // ether in this case MUST be a string
+      };
+      await contract
+        .payWorkers(addresses, balances, date, overrides)
+        .then((result) => console.log(result));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [connector]);
+
+  return (
+    <>
+      {loading && <Text>Loading...</Text>}
+      {error && <Text>Error: {error.message}</Text>}
+      {!loading && !error && workers.length === 0 && (
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.list}>
               <WorkerItem
-                item={{ text: "All caught up! No workers need to be paid" }}
+                item={{ text: "No workers to pay yet!" }}
                 pressHandler={() => {}}
               ></WorkerItem>
             </View>
           </View>
           <View style={styles.bottom}>
-            <Text style={styles.mainText}>Balance: (balance.Total)</Text>
             <TouchableOpacity
-              style={styles.refreshButton}
-              onPress={() => get_checkins()}
+              style={styles.buttonStyle}
+              onPress={() => handleRefresh()}
             >
-              <Text style={styles.signInText}> Refresh List </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.signInButton}
-              onPress={() => console.log("Emit batch payment function")}
-            >
-              <Text style={styles.signInText}> Pay workers </Text>
+              <Text style={styles.buttonTextStyle}> Refresh List </Text>
             </TouchableOpacity>
           </View>
         </View>
-      );
-    } else {
-      return (
+      )}
+      {!loading && !error && workers.length != 0 && (
         <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.list}>
@@ -107,35 +124,42 @@ export default function BatchPay() {
                 data={workers}
                 renderItem={({ item }) => (
                   <WorkerCheckinItem
-                    item={item}
-                    //   pressHandler={removeWorker(item.id.toString)}
+                    item={{
+                      id: item.workerCheckedIn.id,
+                      daysUnpaid: item.workerCheckedIn.daysUnpaid,
+                    }}
+                    pressHandler={removeWorker}
+                    keyExtractor={(item, index) => index.toString()}
                   ></WorkerCheckinItem>
                 )}
               ></FlatList>
             </View>
           </View>
           <View style={styles.bottom}>
-            <Text style={styles.mainText}>Balance: (balance.Total)</Text>
-            {/* <TouchableOpacity
-            style={styles.refreshButton}
-            onPress={() => get_checkins()}
-          >
-            <Text style={styles.signInText}> Refresh List </Text>
-          </TouchableOpacity> */}
             <TouchableOpacity
-              style={styles.signInButton}
-              onPress={() => console.log("Emit batch payment function")}
+              style={styles.buttonStyle}
+              onPress={() => handleRefresh()}
             >
-              <Text style={styles.signInText}> Pay workers </Text>
+              <Text style={styles.buttonTextStyle}> Refresh List </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => batchPay()}
+            >
+              <Text style={styles.buttonTextStyle}> Pay workers </Text>
             </TouchableOpacity>
           </View>
         </View>
-      );
-    }
-  }
+      )}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   screen: {
     flex: 1,
     alignItems: "center",
@@ -149,33 +173,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     marginTop: 0,
   },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  signInButton: {
-    width: 200,
-    height: 60,
-    marginRight: 40,
-    marginLeft: 40,
-    marginTop: 10,
-    padding: 15,
-    backgroundColor: "#1e140a",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  signInText: {
-    color: "white",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
   content: {
     padding: 30,
   },
@@ -184,22 +181,28 @@ const styles = StyleSheet.create({
   },
   bottom: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
-    paddingTop: 40,
+    padding: 20,
   },
-  refreshButton: {
-    width: 200,
-    height: 60,
-    marginRight: 40,
-    marginLeft: 40,
-    marginTop: 10,
-    padding: 15,
-    backgroundColor: "#48b01c",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "black",
+  buttonStyle: {
+    backgroundColor: "#3399FF",
+    borderWidth: 0,
+    color: "#FFFFFF",
+    borderColor: "#3399FF",
+    height: 40,
     alignItems: "center",
-    justifyContent: "center",
+    borderRadius: 30,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  buttonTextStyle: {
+    color: "#FFFFFF",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
