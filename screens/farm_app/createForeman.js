@@ -16,13 +16,6 @@ import ethereum_address from "ethereum-address";
 
 import * as config from "../ChainBytesConfig.js";
 
-const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
-let contract = new ethers.Contract(
-  config.contractAddress,
-  config.contractAbi,
-  provider
-);
-
 export default function CreateForeman(props) {
   const [newForemanAddress, onChangeText] = React.useState(null);
   const connector = useWalletConnect();
@@ -33,8 +26,9 @@ export default function CreateForeman(props) {
       try {
         const provider = new WalletConnectProvider({
           rpc: {
-            4: config.providerUrl,
+            5: config.providerUrl,
           },
+          chainId: 5,
           connector: connector,
           qrcode: false,
         });
@@ -50,7 +44,9 @@ export default function CreateForeman(props) {
         await contract
           .createForeman(_newForemanAddress)
           .then((result) => console.log(result));
-      } catch (e) {}
+      } catch (e) {
+        console.log("Error: function call not good: ", e);
+      }
     },
     [connector]
   );
