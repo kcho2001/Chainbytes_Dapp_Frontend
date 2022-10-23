@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import { View, FlatList, StyleSheet, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import WorkerItem from "./Extra/workerItem";
 import * as config from "../../ChainBytesConfig.js";
 import { ethers } from "ethers";
 import moment from "moment";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import Spinner from "react-native-loading-spinner-overlay";
 
 let checkIn = 0;
 
 const setCheckIn = (num) => {
   checkIn += num;
-}
+};
 
 export function checkedIn() {
   return checkIn;
@@ -35,9 +42,9 @@ export default function Checked_in({ route }) {
   const check_in_workers = React.useCallback(
     async (_workerAddress) => {
       var date = moment().utcOffset("-04:00").format("YYYY-MM-DD hh:mm:ss a");
-      var workers2 = []
+      var workers2 = [];
       for (const worker of _workerAddress) {
-        workers2.push(worker.text)
+        workers2.push(worker.text);
       }
       const provider = new WalletConnectProvider({
         rpc: {
@@ -57,17 +64,15 @@ export default function Checked_in({ route }) {
         signer
       );
       try {
-        setLoading(true)
-        await contract
-          .checkIn(workers2, date)
-          .then((result) => {
-            console.log(workers2.length + " workers signed in at " + date)
-            setCheckIn(workers2.length)
-            setWorkers((prevWorkers) => {
-              return prevWorkers.filter((worker) => worker.text == worker.key);
-            });
-            setLoading(false)
+        setLoading(true);
+        await contract.checkIn(workers2, date).then((result) => {
+          console.log(workers2.length + " workers signed in at " + date);
+          setCheckIn(workers2.length);
+          setWorkers((prevWorkers) => {
+            return prevWorkers.filter((worker) => worker.text == worker.key);
           });
+          setLoading(false);
+        });
       } catch (e) {
         console.error(e);
       }
@@ -110,8 +115,14 @@ export default function Checked_in({ route }) {
   // If there are no workers signed in, display that no workers have signed in
   if (loading) {
     return (
-      <Text> Loading </Text>
-    )
+      <View style={styles.container}>
+        <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+      </View>
+    );
   } else {
     if (workers.length === 0) {
       return (
@@ -120,12 +131,15 @@ export default function Checked_in({ route }) {
             <View style={styles.list}>
               <WorkerItem
                 item={{ text: "No workers have signed in yet!" }}
-                pressHandler={() => { }}
+                pressHandler={() => {}}
               ></WorkerItem>
             </View>
           </View>
           <View style={styles.flex}>
-            <TouchableOpacity style={styles.buttonStyle} onPress={() => console.log("No one has been checked in yet!")}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => console.log("No one has been checked in yet!")}
+            >
               <Text style={styles.buttonTextStyle}> Check in </Text>
             </TouchableOpacity>
           </View>
@@ -148,7 +162,10 @@ export default function Checked_in({ route }) {
             </View>
           </View>
           <View style={styles.flex}>
-            <TouchableOpacity style={styles.buttonStyle} onPress={() => check_in_workers(workers)}>
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={() => check_in_workers(workers)}
+            >
               <Text style={styles.buttonTextStyle}> Check in </Text>
             </TouchableOpacity>
           </View>
@@ -173,7 +190,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    padding: 20
+    padding: 20,
   },
   buttonStyle: {
     backgroundColor: "#3399FF",
