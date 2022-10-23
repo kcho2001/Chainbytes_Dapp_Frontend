@@ -2,7 +2,6 @@ import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
-import EditScreenInfo from '../components/EditScreenInfo';
 import QRCode from "react-native-qrcode-svg";
 import { Text, View } from '../components/Themed';
 import { SafeAreaView } from "react-native-safe-area-context";
