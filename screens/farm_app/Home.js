@@ -6,6 +6,7 @@ import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
 import * as config from "../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -31,7 +32,15 @@ export default function Home({ route }) {
   }, []);
 
   if (Loading) {
-    return <Text> Loading </Text>;
+    return (
+      <View style={styles.container}>
+        <Spinner
+          visible={Loading}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+      </View>
+    );
   } else {
     return (
       <NavigationContainer independent={true}>
