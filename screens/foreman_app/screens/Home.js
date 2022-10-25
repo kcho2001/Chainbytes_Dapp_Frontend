@@ -32,7 +32,7 @@ export default function Home({ route }) {
   const [foreman, setForeman] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [balance, setBalance] = useState();
+  const [balance, setBalance] = useState('');
 
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function Home({ route }) {
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
                 searchWords={["1000 ETH"]}
-                textToHighlight={balance.substr(0, 7) + ' GoerliETH'}
+                textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
               />
             </Text>
           </View>

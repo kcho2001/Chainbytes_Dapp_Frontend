@@ -19,7 +19,6 @@ export default function Scanner({ navigation, route }) {
   const [scanned, setScanned] = useState(false);
   const [type, setType] = useState('');
   const [timeStamp, setTimeStamp] = useState(Date.now())
-  const [prevtimeStamp, setprevTimeStamp] = useState(0)
   const [text, setText] = useState("Not yet scanned");
   const [text2, setText2] = useState("Not yet scanned");
   const [active, setActive] = useState(false)
@@ -88,30 +87,45 @@ export default function Scanner({ navigation, route }) {
 
   // resetBound();
 
-  const clearBounds = (timeStamp, prevtimeStamp) => {
-    useEffect(() => {
-      setInterval(() => {
-        console.log('Hello ' + timeStamp + ' ' + randomBytes(2))
-        if (prevtimeStamp != timeStamp) {
-          setprevTimeStamp(timeStamp)
-          return;
-        }
+  // const clearBounds = (timeStamp, prevtimeStamp) => {
+  //   useEffect(() => {
+  //     const balls = setInterval(() => {
+  //       console.log('Hello ' + timeStamp + ' ' + randomBytes(2))
+  //       if (prevtimeStamp != timeStamp) {
+  //         setprevTimeStamp(timeStamp)
+  //         return;
+  //       }
+  //       setX(0)
+  //       setY(0)
+  //       setHeight(0)
+  //       setWidth(0)
+  //       setText('')
+  //       setScanned(false)
+  //       setprevTimeStamp(timeStamp)
+  //     }, 1000);
+  //     return () => clearInterval(balls)
+  //   }, [])
+  // }
+
+  // clearBounds(timeStamp, prevtimeStamp);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (timeStamp < Date.now() - 200) {
         setX(0)
         setY(0)
         setHeight(0)
         setWidth(0)
         setText('')
         setScanned(false)
-        setprevTimeStamp(timeStamp)
-      }, 1000);
-    }, [])
-  }
-
-  clearBounds(timeStamp, prevtimeStamp);
+      }
+    }, 200)
+    return () => clearInterval(interval)
+  }, [timeStamp])
 
   // What happens when we scan the bar code (only runs once per QR code)
   const handleBarCodeScanned = ({ type, data }) => {
-    setTimeStamp(Date.now())
+    setTimeStamp(() => Date.now())
     setScanned(true);
     setType(type);
     if (ethereum_address.isAddress(data)) {
@@ -125,6 +139,7 @@ export default function Scanner({ navigation, route }) {
 
   const handleBarCodeBoxScanned = ({ bounds, data }) => {
     const { origin, size } = bounds
+    setTimeStamp(() => Date.now())
     setX(origin.x)
     setY(origin.y)
     setHeight(size.height)
