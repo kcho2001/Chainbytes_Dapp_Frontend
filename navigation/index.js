@@ -39,6 +39,7 @@ import {
 } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import * as config from "../screens/ChainBytesConfig";
+import qrModal from "../screens/farm_app/qrModal";
 
 global.myAddress = "";
 
@@ -115,7 +116,9 @@ export function RootNavigator() {
           component={NotFoundScreen}
           options={{ title: "Oops!" }}
         />
-        <Stack.Group screenOptions={{ presentation: "modal", headerShown: false }}>
+        <Stack.Group
+          screenOptions={{ presentation: "modal", headerShown: false }}
+        >
           <Stack.Screen name="Modal" component={ModalScreen} />
         </Stack.Group>
       </Stack.Navigator>

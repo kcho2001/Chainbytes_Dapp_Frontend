@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import * as config from "../../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { checkedIn } from "./Batch_Check_in";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -22,7 +23,7 @@ const shortenAddress = (address) => {
     address.length
   )}`;
   return ret;
-}
+};
 
 // Returns the home screen, displaying informaiton
 export default function Home({ route }) {
@@ -52,16 +53,34 @@ export default function Home({ route }) {
     getData();
   }, []);
 
-  if (loading || loading2) {
-    return <Text> Loading </Text>;
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Spinner
+          visible={loading}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+      </View>
+    );
   } else {
     return (
-      <NavigationContainer independent={true} style={{ backgroundColor: 'white' }}>
+      <NavigationContainer
+        independent={true}
+        style={{ backgroundColor: "white" }}
+      >
         <SafeAreaView style={styles.screen}>
           <View style={styles.mainContainer}>
-            {foreman && <Text style={styles.mainText}>Hello, {shortenAddress(my_address)} </Text>}
+            {foreman && (
+              <Text style={styles.mainText}>
+                Hello, {shortenAddress(my_address)}{" "}
+              </Text>
+            )}
             {!foreman && (
-              <Text style={styles.mainText}> Hello, Not Foreman! You shouldn't be here</Text>
+              <Text style={styles.mainText}>
+                {" "}
+                Hello, Not Foreman! You shouldn't be here
+              </Text>
             )}
           </View>
           <View style={styles.subContainer}>
@@ -76,7 +95,8 @@ export default function Home({ route }) {
           </View>
           <View style={styles.subContainer}>
             <Text style={styles.subText}>
-              You have checked in {checkedIn() != 0 && checkedIn() || 'no'} {checkedIn() != 1 && 'workers' || 'worker'} today
+              You have checked in {(checkedIn() != 0 && checkedIn()) || "no"}{" "}
+              {(checkedIn() != 1 && "workers") || "worker"} today
             </Text>
           </View>
         </SafeAreaView>
@@ -97,20 +117,20 @@ const styles = StyleSheet.create({
   screen: {
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    width: '100%',
+    width: "100%",
     //backgroundColor: 'green',
   },
   mainContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '100%',
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    width: "100%",
     paddingLeft: 5,
   },
   subContainer: {
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: '100%',
-    paddingLeft: 15
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    width: "100%",
+    paddingLeft: 15,
   },
   mainText: {
     fontSize: 30,
@@ -138,13 +158,13 @@ const styles = StyleSheet.create({
   image: {
     height: 350,
     width: 350,
-    borderRadius: 40
+    borderRadius: 40,
   },
   imageView: {
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
     //backgroundColor: 'red',
-    paddingTop: 20
-  }
+    paddingTop: 20,
+  },
 });

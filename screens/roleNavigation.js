@@ -18,6 +18,8 @@ import Tabs from "./foreman_app/navigation/tabs";
 import FarmTab from "./farm_app/farmTab";
 import * as config from "./ChainBytesConfig.js";
 import { Text, View } from "../components/Themed";
+import Spinner from "react-native-loading-spinner-overlay";
+import qrModal from "./farm_app/qrModal";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 // import {
@@ -83,7 +85,15 @@ export default function App({ navigation }) {
   }
 
   if (Loading1 || Loading2) {
-    return <Text> Loading </Text>;
+    return (
+      <View style={styles.container}>
+        <Spinner
+          visible={Loading1 || Loading2}
+          textContent={"Loading..."}
+          textStyle={styles.spinnerTextStyle}
+        />
+      </View>
+    );
   } else {
     // Stack Navigator is created using a protected routes framework
     // Protected routes flow is defined here: https://reactnavigation.org/docs/auth-flow/
@@ -104,6 +114,11 @@ export default function App({ navigation }) {
                 gestureEnabled: false,
               }}
             />
+            <Stack.Group
+              screenOptions={{ presentation: "modal", headerShown: false }}
+            >
+              <Stack.Screen name="qrModal" component={qrModal} />
+            </Stack.Group>
           </>
         )}
         {Foreman == true && (

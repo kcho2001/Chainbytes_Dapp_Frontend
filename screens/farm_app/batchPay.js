@@ -18,6 +18,7 @@ import WorkerItem, {
 import { useQuery } from "@apollo/client";
 import * as query from "../../query";
 import moment from "moment";
+import Spinner from "react-native-loading-spinner-overlay";
 
 export default function BatchPay() {
   //Rate is bound to change depending on how much the workers should be paid (amount in Wei)
@@ -94,7 +95,15 @@ export default function BatchPay() {
 
   return (
     <>
-      {loading && <Text>Loading...</Text>}
+      {loading && (
+        <View style={styles.container}>
+          <Spinner
+            visible={loading}
+            textContent={"Loading..."}
+            textStyle={styles.spinnerTextStyle}
+          />
+        </View>
+      )}
       {error && <Text>Error: {error.message}</Text>}
       {!loading && !error && workers.length === 0 && (
         <View style={styles.container}>
