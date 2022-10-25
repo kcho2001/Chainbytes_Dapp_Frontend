@@ -19,6 +19,7 @@ import FarmTab from "./farm_app/farmTab";
 import * as config from "./ChainBytesConfig.js";
 import { Text, View } from "../components/Themed";
 import Spinner from "react-native-loading-spinner-overlay";
+import qrModal from "./farm_app/qrModal";
 
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 // import {
@@ -113,6 +114,11 @@ export default function App({ navigation }) {
                 gestureEnabled: false,
               }}
             />
+            <Stack.Group
+              screenOptions={{ presentation: "modal", headerShown: false }}
+            >
+              <Stack.Screen name="qrModal" component={qrModal} />
+            </Stack.Group>
           </>
         )}
         {Foreman == true && (
