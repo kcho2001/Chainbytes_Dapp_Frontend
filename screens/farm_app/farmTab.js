@@ -9,12 +9,12 @@ import HomeTab from "./Home";
 
 const Tab = createBottomTabNavigator();
 
-export default function FarmTab({ route }) {
+export default function FarmTab({ navigation }) {
   const connector = useWalletConnect();
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={({ navigation }) => ({
+      screenOptions={() => ({
         headerShown: true,
         gestureEnabled: false,
         headerBackVisible: false,
@@ -58,7 +58,7 @@ export default function FarmTab({ route }) {
     >
       <Tab.Screen
         name="Create Foreman"
-        children={() => <CreateForeman address={connector.accounts[0]} />}
+        children={({ navigation }) => <CreateForeman navigation={navigation} />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"wallet"} color={color} size={size} />
@@ -69,7 +69,6 @@ export default function FarmTab({ route }) {
         //Home tab
         name="Home"
         component={HomeTab}
-        initialParams={{ address: connector.accounts[0] }}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"home"} color={color} size={size} />
@@ -78,7 +77,7 @@ export default function FarmTab({ route }) {
       ></Tab.Screen>
       <Tab.Screen
         name="Batch Pay"
-        children={() => <BatchPay address={connector.accounts[0]} />}
+        children={() => <BatchPay />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons
