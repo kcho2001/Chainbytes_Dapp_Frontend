@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import ethereum_address from "ethereum-address";
@@ -26,11 +26,14 @@ export default function Scanner({ navigation, route }) {
   const [y, setY] = useState(0)
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
+  const intervalRef = useRef(null)
 
   useEffect(() => navigation.addListener('state', (state) => {
     let x = state.data.state.history.length
     if (x === 2) {
       setActive(false)
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
       resetBound()
     } else if (x === 1) {
       setActive(true)
@@ -110,7 +113,7 @@ export default function Scanner({ navigation, route }) {
   // clearBounds(timeStamp, prevtimeStamp);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       if (timeStamp < Date.now() - 200) {
         setX(0)
         setY(0)
@@ -120,7 +123,7 @@ export default function Scanner({ navigation, route }) {
         setScanned(false)
       }
     }, 200)
-    return () => clearInterval(interval)
+    return () => clearInterval(intervalRef.current)
   }, [timeStamp])
 
   // What happens when we scan the bar code (only runs once per QR code)
