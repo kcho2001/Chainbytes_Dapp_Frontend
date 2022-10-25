@@ -30,8 +30,19 @@ export default function Home({ route }) {
   const my_address = connector.accounts[0];
   const [foreman, setForeman] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
+  const [balance, setBalance] = useState();
+
 
   useEffect(() => {
+    async function getBalance() {
+      await provider.getBalance(connector.accounts[0]).then((result) => {
+        setBalance(ethers.utils.formatEther(result))
+        setLoading2(false)
+      });
+    }
+    getBalance();
+
     async function getData() {
       await contract.isForeman(my_address).then((result) => {
         setForeman(result);
@@ -41,7 +52,7 @@ export default function Home({ route }) {
     getData();
   }, []);
 
-  if (loading) {
+  if (loading || loading2) {
     return <Text> Loading </Text>;
   } else {
     return (
@@ -59,7 +70,7 @@ export default function Home({ route }) {
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
                 searchWords={["1000 ETH"]}
-                textToHighlight="1000 ETH"
+                textToHighlight={balance.substr(0, 7) + ' GoerliETH'}
               />
             </Text>
           </View>
