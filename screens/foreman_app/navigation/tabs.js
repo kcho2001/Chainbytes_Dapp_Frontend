@@ -7,10 +7,10 @@ import Home from "../screens/Home";
 import Scanner from "../screens/Scanner";
 import BatchCheckIn from "../screens/Batch_Check_in"
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { textColor, backgroundColor, View } from '../../../components/Themed'
 
 // creates the tab navigator
 const Tab = createBottomTabNavigator();
-import { textColor, backgroundColor, View } from '../../../components/Themed'
 
 
 // creates the tabs
@@ -61,11 +61,12 @@ const Tabs = ({ route }) => {
           alignItems: 'center',
           justifyContent: "center",
           bottom: '2%',
-          left: 20,
-          right: 20,
-          elevation: 0,
+          left: 15,
+          right: 15,
           backgroundColor: bg,
-          borderRadius: 20,
+          borderRadius: 15,
+          borderWeight: 2,
+          borderTopColor: bg,
           height: 50,
           ...stlyes.shadow
         },
@@ -122,14 +123,13 @@ const Tabs = ({ route }) => {
 // style sheet
 const stlyes = StyleSheet.create({
   shadow: {
-    shadowColor: "grey",
+    shadowColor: "lightgrey",
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 0,
     },
-    shadowOpacity: 0.4,
-    shadowRadius: 4.5,
-    elevation: 5,
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
   },
 });
 

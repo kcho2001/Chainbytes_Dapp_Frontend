@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import QRCode from "react-native-qrcode-svg";
-import { Text, View } from '../components/Themed';
+import { Text, textColor, View } from '../components/Themed';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const shortenAddress = (address: string) => {
@@ -17,6 +17,7 @@ const shortenAddress = (address: string) => {
 
 export default function ModalScreen({ navigation }) {
   const connector = useWalletConnect();
+  const tc = textColor();
 
   const killSession = React.useCallback(() => {
     connector.killSession();
@@ -24,11 +25,11 @@ export default function ModalScreen({ navigation }) {
   }, [connector]);
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { borderColor: tc, paddingTop: 20, borderRadius: 10, borderWidth: 2, borderBottomWidth: 0 }]}>
       <Text style={styles.title}>Currently logged in as:</Text>
       <Text style={styles.addressText}>{shortenAddress(connector.accounts[0])}</Text>
       <View style={styles.screen}>
-        <View style={styles.signInBackground}>
+        <View style={[styles.signInBackground, { borderColor: tc }]}>
           <TouchableOpacity
             style={styles.signInButton}
             onPress={() => navigation.navigate("farmHome")}
@@ -37,16 +38,16 @@ export default function ModalScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.signInButton}
-            onPress={() => navigation.navigate("workerHome")}
+            onPress={() => navigation.navigate("adminHome")}
           >
-            <Text style={styles.signInText}>Sign in to Worker</Text>
+            <Text style={styles.signInText}>Sign in to Foreman</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.signInButton}
-            onPress={() => navigation.navigate("adminHome")}
+            onPress={() => navigation.navigate("workerHome")}
           >
-            <Text style={styles.signInText}>Sign in to Admin</Text>
+            <Text style={styles.signInText}>Sign in to Worker</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
@@ -77,11 +78,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: "HelveticaNeue-Bold"
   },
   separator: {
     marginVertical: 30,
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   buttonStyle: {
-    backgroundColor: "#3399FF",
+    backgroundColor: "#272727",
     borderWidth: 0,
     color: "#FFFFFF",
     borderColor: "#3399FF",
@@ -123,7 +125,8 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginTop: 10,
     padding: 1,
-    backgroundColor: "#1e140a",
+    backgroundColor: "#272727",
+    opacity: 0.8,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "black",
@@ -132,15 +135,17 @@ const styles = StyleSheet.create({
   },
   signInText: {
     color: "white",
+    fontFamily: "Helvetica Neue"
   },
   addressText: {
     fontSize: 16,
     padding: 10
-  }, 
+  },
   container2: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding: 20
+    padding: 20,
+    fontFamily: "Helvetica Neue"
   },
 });

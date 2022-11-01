@@ -121,7 +121,7 @@ export default function App({ navigation }) {
             </Stack.Group>
           </>
         )}
-        {Foreman == true && (
+        {Foreman && (
           <>
             <Stack.Screen
               name="adminHome"
@@ -134,7 +134,7 @@ export default function App({ navigation }) {
             />
           </>
         )}
-        {!Farm && !Foreman && (
+        {!Farm && (
           <>
             <Stack.Screen
               name="workerHome"

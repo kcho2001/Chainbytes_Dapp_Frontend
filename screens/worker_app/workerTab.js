@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Pressable, View, Text, Button } from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import QRWallet from "./qrWallet";
@@ -7,11 +7,15 @@ import WorkerHomeScreen from "./workerHome";
 import WorkCalendar from "./workerCalendar";
 import { ethers } from "ethers";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { textColor, backgroundColor, View } from '../../components/Themed'
+
 
 const Tab = createBottomTabNavigator();
 
 export default function WorkerTab({ route }) {
   const connector = useWalletConnect();
+  const color = textColor()
+  const bg = backgroundColor();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -19,6 +23,8 @@ export default function WorkerTab({ route }) {
         headerShown: true,
         gestureEnabled: false,
         headerBackVisible: false,
+        headerTransparent: true,
+        detachInactiveScreens: true, 
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -30,31 +36,37 @@ export default function WorkerTab({ route }) {
               name="info-circle"
               size={25}
               style={{ marginRight: 15 }}
+              color={color}
             />
           </Pressable>
         ),
-        headerStyle: {
-          backgroundColor: "#C4A484",
-        },
+        // headerStyle: {
+        //   backgroundColor: "#C4A484",
+        // },
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: "800",
-          fontFamily: "Cochin",
+          fontFamily: "HelveticaNeue-Bold",
+          color: color
         },
         tabBarShowLabel: false,
 
         // Different tab bar style (uncomment to see)
-        /*tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 25,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: "#ffffff",
-                    borderRadius: 100,
-                    height: 90,
-                    ... stlyes.shadow
-                }*/
+        tabBarStyle: {
+          position: 'absolute',
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: "center",
+          bottom: '2%',
+          left: 20,
+          right: 20,
+          elevation: 0,
+          backgroundColor: bg,
+          borderRadius: 20,
+          height: 50,
+          ...styles.shadow
+        },
+        tabBarActiveTintColor: color
       })}
     >
       <Tab.Screen
@@ -98,5 +110,15 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
     color: "white",
+  },
+  shadow: {
+    shadowColor: "grey",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4.5,
+    elevation: 5,
   },
 });

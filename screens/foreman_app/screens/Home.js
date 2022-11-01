@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet, ImageBackground, Appearance } from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
@@ -71,40 +71,39 @@ export default function Home({ route }) {
     return (
       <NavigationContainer
         independent={true}
-        style={{  }}
       >
         {/* <ImageBackground source={image} resizeMode="cover" style={styles.screen}> */}
-          <SafeAreaView style={[styles.screen, {backgroundColor: bg}]}>
-            <View style={styles.mainContainer}>
-              {foreman && (
-                <Text style={styles.mainText}>
-                  Hello, {shortenAddress(my_address)}{" "}
-                </Text>
-              )}
-              {!foreman && (
-                <Text style={styles.mainText}>
-                  {" "}
-                  Hello, Not Foreman! You shouldn't be here
-                </Text>
-              )}
-            </View>
-            <View style={styles.subContainer}>
-              <Text style={styles.subText}>
-                Balance:{" "}
-                <HighlightText
-                  highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                  searchWords={["1000 ETH"]}
-                  textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
-                />
+        <SafeAreaView style={[styles.screen, { backgroundColor: bg }]}>
+          <View style={styles.mainContainer}>
+            {foreman && (
+              <Text style={styles.mainText}>
+                Hello, {shortenAddress(my_address)}{" "}
               </Text>
-            </View>
-            <View style={styles.subContainer}>
-              <Text style={styles.subText}>
-                You have checked in {(checkedIn() != 0 && checkedIn()) || "no"}{" "}
-                {(checkedIn() != 1 && "workers") || "worker"} today
+            )}
+            {!foreman && (
+              <Text style={styles.mainText}>
+                {" "}
+                Hello, Not Foreman! You shouldn't be here
               </Text>
-            </View>
-            {/* <View style={styles.imageView}>
+            )}
+          </View>
+          <View style={styles.subContainer}>
+            <Text style={styles.subText}>
+              Balance:{" "}
+              <HighlightText
+                highlightStyle={{ backgroundColor: "#d3d3d3" }}
+                searchWords={["1000 ETH"]}
+                textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
+              />
+            </Text>
+          </View>
+          <View style={styles.subContainer}>
+            <Text style={styles.subText}>
+              You have checked in {(checkedIn() != 0 && checkedIn()) || "no"}{" "}
+              {(checkedIn() != 1 && "workers") || "worker"} today
+            </Text>
+          </View>
+          {/* <View style={styles.imageView}>
               <Image
                 style={styles.image}
                 source={{
@@ -112,8 +111,7 @@ export default function Home({ route }) {
                 }}
               />
             </View> */}
-
-          </SafeAreaView>
+        </SafeAreaView>
         {/* </ImageBackground> */}
       </NavigationContainer>
     );
@@ -139,18 +137,18 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
-    paddingLeft: 15,
+    paddingLeft: 35,
     backgroundColor: 'rgba(0,0,0,0)'
   },
   mainText: {
-    fontSize: 30,
+    fontSize: 50,
     paddingBottom: 5,
     paddingTop: 0,
     marginTop: 0,
     fontFamily: "HelveticaNeue-Bold"
   },
   subText: {
-    fontSize: 18,
+    fontSize: 25,
     paddingBottom: 5,
     paddingTop: 0,
     marginTop: 0,

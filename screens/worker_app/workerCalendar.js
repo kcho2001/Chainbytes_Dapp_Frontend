@@ -1,7 +1,8 @@
-import { StyleSheet, SafeAreaView, Text, Button } from "react-native";
+import { StyleSheet, SafeAreaView, Button } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as config from "../ChainBytesConfig";
 import { ethers } from "ethers";
+import { Text, View, backgroundColor, textColor } from '../../components/Themed';
 
 // Contract declaration
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
@@ -13,11 +14,14 @@ let contract = new ethers.Contract(
 
 export default function WorkCalendar(props) {
   const address = props.address; //Address to use for getting checked in dates
+  let bg = backgroundColor()
+  let tc = textColor()
+
+  
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={[styles.screen, {backgroundColor: bg}]}>
       <Calendar
         minDate={"2022-05-01"}
-        // Do not show days of other months in month page. Default = false
         hideExtraDays={true}
         // // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
         //maxDate={}
@@ -27,6 +31,25 @@ export default function WorkCalendar(props) {
         // }}
         enableSwipeMonths={true}
         markedDates={{ getCheckedIn }}
+        style={{
+          height: '100%',
+          justifyContent: "center",
+          backgroundColor: bg
+        }}
+        theme={{
+          calendarBackground: bg,
+          textSectionTitleColor: tc,
+          todayTextColor: tc,
+          dayTextColor: 'gray',
+          monthTextColor: tc,
+          arrowColor: tc,
+          textDayFontFamily: 'HelveticaNeue-Bold',
+          textMonthFontFamily: 'HelveticaNeue-Bold',
+          textDayHeaderFontFamily: 'HelveticaNeue-Bold',
+          textDayFontSize: 18,
+          textMonthFontSize: 25,
+          textDayHeaderFontSize: 14
+        }}
       />
     </SafeAreaView>
   );
