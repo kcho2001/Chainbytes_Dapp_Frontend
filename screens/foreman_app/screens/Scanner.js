@@ -6,7 +6,7 @@ import ethereum_address from "ethereum-address";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
 import { randomBytes } from "ethers/lib/utils";
-import {View, Text, textColor} from "../../../components/Themed"
+import { View, Text, textColor } from "../../../components/Themed"
 
 const shortenAddress = (address) => {
   global.myAddress = address;
@@ -100,9 +100,9 @@ export default function Scanner({ navigation, route }) {
   };
 
   const handleCheckIn = () => {
-    if(ethereum_address.isAddress(text)){
+    if (ethereum_address.isAddress(text)) {
       navigation.navigate("Batch Check In", { type: type, data: text, new: true });
-      
+
     } else {
       notAddress();
     }
@@ -186,20 +186,22 @@ export default function Scanner({ navigation, route }) {
                   setScanned(false)
                   setText('')
                 }}
-                color="tomato"
+                color="red"
+                style={{ fontFamily: "HelveticaNeue-Bold" }}
               />
             )}
             <Button
               title={"Check in worker"}
               onPress={() => handleCheckIn()}
+              style={{ fontFamily: "HelveticaNeue-Bold" }}
             />
           </View>
         }
         {scanned && (
-          <View style={{ position: 'absolute', top: y, left: x + 0.5 * width, alignItems: 'center'}}>
-            <View style={{ position: 'absolute', width: width, height: height, borderColor: 'red', borderWidth: 2, backgroundColor: 'rgba(0,0,0,0)' }}></View>
+          <View style={{ position: 'absolute', top: y, left: x + 0.5 * width, alignItems: 'center' }}>
+            <View style={{ position: 'absolute', width: width, height: height, borderColor: 'red', borderWidth: 2, backgroundColor: 'rgba(0,0,0,0)', }}></View>
             <View style={{ position: 'absolute', top: height + 4 }}>
-              <Text> {text2} </Text>
+              <Text style={{ fontFamily: "HelveticaNeue-Bold" }}> {text2} </Text>
             </View>
           </View>)}
       </View>
@@ -217,6 +219,7 @@ const styles = StyleSheet.create({
   maintext: {
     fontSize: 16,
     margin: 10,
+    fontFamily: "HelveticaNeue-Bold"
   },
   barcodebox: {
     alignItems: "center",
