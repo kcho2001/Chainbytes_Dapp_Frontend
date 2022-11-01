@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import {
-  View,
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Text,
 } from "react-native";
 import WorkerItem from "./Extra/workerItem";
 import * as config from "../../ChainBytesConfig.js";
@@ -13,6 +11,7 @@ import moment from "moment";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Spinner from "react-native-loading-spinner-overlay";
+import {View, Text} from '../../../components/Themed'
 
 let checkIn = 0;
 
@@ -177,14 +176,13 @@ export default function Checked_in({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    flex: 1
   },
   content: {
-    padding: 30,
+    padding: 5
   },
   list: {
-    marginTop: 0,
+    marginTop: '25%'
   },
   flex: {
     flex: 1,
@@ -193,7 +191,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   buttonStyle: {
-    backgroundColor: "#3399FF",
+    backgroundColor: "lightgrey",
     borderWidth: 0,
     color: "#FFFFFF",
     borderColor: "#3399FF",
@@ -204,12 +202,13 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginTop: 20,
     marginBottom: 20,
+    bottom: '7%'
   },
   buttonTextStyle: {
-    color: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 15,
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: "Helvetica Neue"
   },
 });

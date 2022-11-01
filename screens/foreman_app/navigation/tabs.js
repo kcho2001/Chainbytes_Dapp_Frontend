@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { StyleSheet, Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -11,11 +10,14 @@ import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 // creates the tab navigator
 const Tab = createBottomTabNavigator();
+import { textColor, backgroundColor, View } from '../../../components/Themed'
 
 
 // creates the tabs
 const Tabs = ({ route }) => {
   const connector = useWalletConnect();
+  const color = textColor()
+  const bg = backgroundColor();
   return (
     <Tab.Navigator
       // Starts on Home screen, plus screen options
@@ -24,6 +26,8 @@ const Tabs = ({ route }) => {
         headerShown: true,
         gestureEnabled: false,
         headerBackVisible: false,
+        headerTransparent: true,
+        detachInactiveScreens: true, 
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -35,31 +39,37 @@ const Tabs = ({ route }) => {
               name="info-circle"
               size={25}
               style={{ marginRight: 15 }}
+              color={color}
             />
           </Pressable>
         ),
-        headerStyle: {
-          backgroundColor: "white",
-        },
+        // headerStyle: {
+        //   backgroundColor: ,
+        // },
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: "800",
           fontFamily: "HelveticaNeue-Bold",
+          color: color
         },
         tabBarShowLabel: false,
 
         // Different tab bar style (uncomment to see)
-        /*tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 25,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: "#ffffff",
-                    borderRadius: 100,
-                    height: 90,
-                    ... stlyes.shadow
-                }*/
+        tabBarStyle: {
+          position: 'absolute',
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: "center",
+          bottom: '2%',
+          left: 20,
+          right: 20,
+          elevation: 0,
+          backgroundColor: bg,
+          borderRadius: 20,
+          height: 50,
+          ...stlyes.shadow
+        },
+        tabBarActiveTintColor: color
       })}
     >
       <Tab.Screen
@@ -68,7 +78,7 @@ const Tabs = ({ route }) => {
         component={Scanner}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name={"camera"} color={color} size={size} />
+            <Ionicons name={"camera"} color={color} size={size} style={{ textAlignVertical: 'center' }} />
           ),
         }}
       ></Tab.Screen>
@@ -78,7 +88,7 @@ const Tabs = ({ route }) => {
         component={Home}
         initialParams={{ address: connector.accounts[0] }}
         options={{
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons name={"home"} color={color} size={size} />
           ),
         }}
@@ -112,13 +122,13 @@ const Tabs = ({ route }) => {
 // style sheet
 const stlyes = StyleSheet.create({
   shadow: {
-    shadowColor: "#7F5DF0",
+    shadowColor: "grey",
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 5,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
+    shadowOpacity: 0.4,
+    shadowRadius: 4.5,
     elevation: 5,
   },
 });

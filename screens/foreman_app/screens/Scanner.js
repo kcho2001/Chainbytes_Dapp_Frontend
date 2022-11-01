@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import { StyleSheet, Button, Alert, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import ethereum_address from "ethereum-address";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { FontAwesome } from "@expo/vector-icons";
 import { randomBytes } from "ethers/lib/utils";
-//import { randomBytes } from "ethers/lib/utils";
+import {View, Text, textColor} from "../../../components/Themed"
 
 const shortenAddress = (address) => {
   global.myAddress = address;
@@ -27,6 +30,7 @@ export default function Scanner({ navigation, route }) {
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const intervalRef = useRef(null)
+  const tc = textColor()
 
   useEffect(() => navigation.addListener('state', (state) => {
     let x = state.data.state.history.length
@@ -34,7 +38,6 @@ export default function Scanner({ navigation, route }) {
       setActive(false)
       clearInterval(intervalRef.current)
       intervalRef.current = null
-      resetBound()
     } else if (x === 1) {
       setActive(true)
     } else {
@@ -43,7 +46,6 @@ export default function Scanner({ navigation, route }) {
   }), [])
 
   const askForCameraPermission = () => {
-    resetBound();
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
@@ -58,7 +60,7 @@ export default function Scanner({ navigation, route }) {
   // Alert when a QR code is scanned and it is not an address
   const notAddress = () => {
     Alert.alert(
-      "QR READ ERROR",
+      "QR CHECK IN ERROR",
       "This is not an ethereum address",
       [
         {
@@ -70,48 +72,6 @@ export default function Scanner({ navigation, route }) {
     );
   };
 
-  const resetBound = () => {
-    // if (ethereum_address.isAddress(data)) {
-    //   navigation.navigate("Batch Check In", { type: type, data: data, new: true });
-    // } else {
-    //   notAddress();
-    // }
-  };
-
-  // function resetBound() {
-  //   // do whatever you like here
-  //   setX(0)
-  //   setY(0)
-  //   setHeight(0)
-  //   setWidth(0)
-  //   setText('')
-  //   setTimeout(resetBound, 5000);
-  // }
-
-  // resetBound();
-
-  // const clearBounds = (timeStamp, prevtimeStamp) => {
-  //   useEffect(() => {
-  //     const balls = setInterval(() => {
-  //       console.log('Hello ' + timeStamp + ' ' + randomBytes(2))
-  //       if (prevtimeStamp != timeStamp) {
-  //         setprevTimeStamp(timeStamp)
-  //         return;
-  //       }
-  //       setX(0)
-  //       setY(0)
-  //       setHeight(0)
-  //       setWidth(0)
-  //       setText('')
-  //       setScanned(false)
-  //       setprevTimeStamp(timeStamp)
-  //     }, 1000);
-  //     return () => clearInterval(balls)
-  //   }, [])
-  // }
-
-  // clearBounds(timeStamp, prevtimeStamp);
-
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       if (timeStamp < Date.now() - 200) {
@@ -119,8 +79,7 @@ export default function Scanner({ navigation, route }) {
         setY(0)
         setHeight(0)
         setWidth(0)
-        setText('')
-        setScanned(false)
+        setText2('')
       }
     }, 200)
     return () => clearInterval(intervalRef.current)
@@ -139,6 +98,18 @@ export default function Scanner({ navigation, route }) {
     }
     //console.log("Type: " + type + "\nData: " + data);
   };
+
+  const handleCheckIn = () => {
+    if(ethereum_address.isAddress(text)){
+      navigation.navigate("Batch Check In", { type: type, data: text, new: true });
+      
+    } else {
+      notAddress();
+    }
+    setText('')
+    setType('')
+    setScanned(false)
+  }
 
   const handleBarCodeBoxScanned = ({ bounds, data }) => {
     const { origin, size } = bounds
@@ -190,26 +161,44 @@ export default function Scanner({ navigation, route }) {
             style={{ height: '100%', width: '100%' }}>
           </BarCodeScanner>
         </View>
-        <View style={styles.buttonBox}>
-          <Text style={styles.maintext}>{text}</Text>
-          {scanned && (
-            <Button
-              title={"Scan again?"}
-              onPress={() => {
-                resetBound();
-              }}
-              color="tomato"
-            />
-          )}
-          <Button
-            title={"Disable Camera"}
-            onPress={() => setHasPermission(false)}
+        <Pressable
+          onPress={() => setHasPermission(false)}
+          style={({ pressed }) => ({
+            opacity: pressed ? 0.5 : 1,
+            position: "absolute",
+            top: '13%', right: '0%'
+          })}
+        >
+          <FontAwesome
+            name="camera"
+            size={20}
+            style={{ marginRight: 15 }}
+            color={tc}
           />
-        </View>
+        </Pressable>
+        {scanned &&
+          <View style={styles.buttonBox}>
+            <Text style={styles.maintext}>{ethereum_address.isAddress(text) ? shortenAddress(text) : text}</Text>
+            {scanned && (
+              <Button
+                title={"Retry Scan"}
+                onPress={() => {
+                  setScanned(false)
+                  setText('')
+                }}
+                color="tomato"
+              />
+            )}
+            <Button
+              title={"Check in worker"}
+              onPress={() => handleCheckIn()}
+            />
+          </View>
+        }
         {scanned && (
-          <View style={{ position: 'absolute', top: y, left: x + 0.5 * width, alignItems: 'center' }}>
-            <View style={{ position: 'absolute', width: width, height: height, borderColor: 'blue', borderWidth: 2 }}></View>
-            <View style={{ position: 'absolute', top: height + 4, backgroundColor: 'green' }}>
+          <View style={{ position: 'absolute', top: y, left: x + 0.5 * width, alignItems: 'center'}}>
+            <View style={{ position: 'absolute', width: width, height: height, borderColor: 'red', borderWidth: 2, backgroundColor: 'rgba(0,0,0,0)' }}></View>
+            <View style={{ position: 'absolute', top: height + 4 }}>
               <Text> {text2} </Text>
             </View>
           </View>)}
@@ -221,7 +210,6 @@ export default function Scanner({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "flex-end",
     // backgroundColor: 'tomato'
@@ -242,11 +230,11 @@ const styles = StyleSheet.create({
     flex: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.5)',
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: '10%',
+    bottom: '15%',
   }
 });
 
