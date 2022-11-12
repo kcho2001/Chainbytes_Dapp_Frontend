@@ -29,8 +29,19 @@ export default function Home({ route }) {
   const connector = useWalletConnect();
   const my_address = connector.accounts[0];
   const [Farm, setFarm] = useState(true);
-  const [Loading, setLoading] = useState(true);
+  const [balance, setBalance] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
+
   useEffect(() => {
+    async function getBalance() {
+      await provider.getBalance(connector.accounts[0]).then((result) => {
+        setBalance(ethers.utils.formatEther(result));
+        setLoading2(false);
+      });
+    }
+    getBalance();
+
     async function getData() {
       await contract.isFarm(my_address).then((result) => {
         setFarm(result);
@@ -38,13 +49,13 @@ export default function Home({ route }) {
       });
     }
     getData();
-  }, []);
+  });
 
-  if (Loading) {
+  if (loading || loading2) {
     return (
       <View style={styles.container}>
         <Spinner
-          visible={Loading}
+          visible={loading || loading2}
           textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
@@ -69,9 +80,9 @@ export default function Home({ route }) {
               </Text>
             )}
           </View>
-          {/**This will display the balance of the farm*/}
+          {/**This will display the active workers of the farm*/}
           <View style={styles.subContainer}>
-            <Text style={styles.subText}>
+            {/* <Text style={styles.subText}>
               {" "}
               Active Workers:{" "}
               <HighlightText
@@ -79,14 +90,14 @@ export default function Home({ route }) {
                 searchWords={["1000"]}
                 textToHighlight="1000"
               />
-            </Text>
+            </Text> */}
             <Text style={styles.subText}>
               {" "}
               Balance:{" "}
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={["1000 ETH"]}
-                textToHighlight="1000 ETH"
+                searchWords={[balance.slice(0, 7)]}
+                textToHighlight={balance.slice(0, 7) + " GoerliETH"}
               />
             </Text>
           </View>
