@@ -9,9 +9,8 @@ import * as config from "../ChainBytesConfig.js";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
-import { Text, View, backgroundColor } from '../../components/Themed';
+import { Text, View, backgroundColor } from "../../components/Themed";
 import Spinner from "react-native-loading-spinner-overlay";
-
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -20,20 +19,20 @@ let contract = new ethers.Contract(
   provider
 );
 
-export default function WorkerHomeScreen(props) {
+export default function WorkerHomeScreen() {
   const connector = useWalletConnect();
-  const my_address = connector.accounts[0]
+  const my_address = connector.accounts[0];
   const [lastCheckedIn, setCheckedIn] = React.useState("N/A");
   const [loading, setLoading] = useState(true);
-  const [balance, setBalance] = useState('');
+  const [balance, setBalance] = useState("");
 
-  const bg = backgroundColor()
+  const bg = backgroundColor();
 
   useEffect(() => {
     async function getBalance() {
       await provider.getBalance(connector.accounts[0]).then((result) => {
-        setBalance(ethers.utils.formatEther(result))
-        setLoading(false)
+        setBalance(ethers.utils.formatEther(result));
+        setLoading(false);
       });
     }
     getBalance();
@@ -62,11 +61,11 @@ export default function WorkerHomeScreen(props) {
           </View>
           <View style={styles.subContainer}>
             <Text style={styles.subText}>
-              Balance: {" "}
+              Balance:{" "}
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={["1000 ETH"]}
-                textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
+                searchWords={[balance.slice(0, 7)]}
+                textToHighlight={balance.slice(0, 7) + " GoerliETH"}
               />
             </Text>
           </View>
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   mainContainer: {
     alignItems: "flex-start",
@@ -98,21 +97,21 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 5,
     paddingTop: 100,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: "rgba(0,0,0,0)",
   },
   subContainer: {
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
     paddingLeft: 35,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: "rgba(0,0,0,0)",
   },
   mainText: {
     fontSize: 50,
     paddingBottom: 5,
     paddingTop: 0,
     marginTop: 0,
-    fontFamily: "HelveticaNeue-Bold"
+    fontFamily: "HelveticaNeue-Bold",
   },
   subText: {
     fontSize: 25,
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     alignItems: "center",
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingTop: 20,
   },
 });

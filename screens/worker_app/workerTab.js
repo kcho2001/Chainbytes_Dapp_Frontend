@@ -7,14 +7,13 @@ import WorkerHomeScreen from "./workerHome";
 import WorkCalendar from "./workerCalendar";
 import { ethers } from "ethers";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { textColor, backgroundColor, View } from '../../components/Themed'
-
+import { textColor, backgroundColor, View } from "../../components/Themed";
 
 const Tab = createBottomTabNavigator();
 
 export default function WorkerTab({ route }) {
   const connector = useWalletConnect();
-  const color = textColor()
+  const color = textColor();
   const bg = backgroundColor();
   return (
     <Tab.Navigator
@@ -24,7 +23,7 @@ export default function WorkerTab({ route }) {
         gestureEnabled: false,
         headerBackVisible: false,
         headerTransparent: true,
-        detachInactiveScreens: true, 
+        detachInactiveScreens: true,
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -47,15 +46,15 @@ export default function WorkerTab({ route }) {
           fontSize: 20,
           fontWeight: "800",
           fontFamily: "HelveticaNeue-Bold",
-          color: color
+          color: color,
         },
         tabBarShowLabel: false,
 
         // Different tab bar style (uncomment to see)
         tabBarStyle: {
-          position: 'absolute',
+          position: "absolute",
           flex: 1,
-          alignItems: 'center',
+          alignItems: "center",
           justifyContent: "center",
           bottom: '2%',
           left: 15,
@@ -65,14 +64,14 @@ export default function WorkerTab({ route }) {
           borderWeight: 2,
           borderTopColor: bg,
           height: 50,
-          ...styles.shadow
+          ...styles.shadow,
         },
-        tabBarActiveTintColor: color
+        tabBarActiveTintColor: color,
       })}
     >
       <Tab.Screen
         name="QR Wallet"
-        children={() => <QRWallet address={connector.accounts[0]} />}
+        children={() => <QRWallet />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"wallet"} color={color} size={size} />
@@ -81,7 +80,7 @@ export default function WorkerTab({ route }) {
       />
       <Tab.Screen
         name="Home"
-        children={() => <WorkerHomeScreen address={connector.accounts[0]} />}
+        children={() => <WorkerHomeScreen />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"home"} color={color} size={size} />
@@ -90,7 +89,7 @@ export default function WorkerTab({ route }) {
       />
       <Tab.Screen
         name="Calendar"
-        children={() => <WorkCalendar address={connector.accounts[0]} />}
+        children={() => <WorkCalendar />}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Ionicons name={"calendar"} color={color} size={size} />

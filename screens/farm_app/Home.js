@@ -53,13 +53,13 @@ export default function Home({ route }) {
       });
     }
     getData();
-  }, []);
+  });
 
-  if (Loading || loading2) {
+  if (loading || loading2) {
     return (
       <View style={styles.mainContainer}>
         <Spinner
-          visible={Loading}
+          visible={loading || loading2}
           textContent={"Loading..."}
           textStyle={styles.spinnerTextStyle}
         />
@@ -84,13 +84,25 @@ export default function Home({ route }) {
               </Text>
             )}
           </View>
-          {/**This will display the balance of the farm*/}
+          {/**This will display the active workers of the farm*/}
           <View style={styles.subContainer}>
+            {/* <Text style={styles.subText}>
+              {" "}
+              Active Workers:{" "}
+              <HighlightText
+                highlightStyle={{ backgroundColor: "#d3d3d3" }}
+                searchWords={["1000"]}
+                textToHighlight="1000"
+              />
+            </Text> */}
             <Text style={styles.subText}>
-              Active Workers: 1000
-            </Text>
-            <Text style={styles.subText}>
-              Balance: {balance.slice(0, 7) + ' GoerliETH'}
+              {" "}
+              Balance:{" "}
+              <HighlightText
+                highlightStyle={{ backgroundColor: "#d3d3d3" }}
+                searchWords={[balance.slice(0, 7)]}
+                textToHighlight={balance.slice(0, 7) + " GoerliETH"}
+              />
             </Text>
           </View>
           {/**This will display the amount of active workers under the farm */}
