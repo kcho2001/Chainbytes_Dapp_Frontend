@@ -1,13 +1,9 @@
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import {
-  View,
   StyleSheet,
   FlatList,
-  Text,
-  TextInput,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
@@ -19,6 +15,7 @@ import { useQuery } from "@apollo/client";
 import * as query from "../../query";
 import moment from "moment";
 import Spinner from "react-native-loading-spinner-overlay";
+import { View, Text, backgroundColor } from '../../components/Themed'
 
 export default function BatchPay() {
   //Rate is bound to change depending on how much the workers should be paid (amount in Wei)
@@ -111,7 +108,7 @@ export default function BatchPay() {
             <View style={styles.list}>
               <WorkerItem
                 item={{ text: "No workers to pay yet!" }}
-                pressHandler={() => {}}
+                pressHandler={() => { }}
               ></WorkerItem>
             </View>
           </View>
@@ -131,6 +128,7 @@ export default function BatchPay() {
             <View style={styles.list}>
               <FlatList
                 data={workers}
+                keyExtractor={worker => worker.workerCheckedIn.id}
                 renderItem={({ item }) => (
                   <WorkerCheckinItem
                     item={{
@@ -144,7 +142,7 @@ export default function BatchPay() {
               ></FlatList>
             </View>
           </View>
-          <View style={styles.bottom}>
+          <View style={styles.flex}>
             <TouchableOpacity
               style={styles.buttonStyle}
               onPress={() => handleRefresh()}
@@ -167,35 +165,23 @@ export default function BatchPay() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  screen: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: 80,
-  },
-  mainText: {
-    fontSize: 20,
-    color: "black",
-    paddingBottom: 5,
-    paddingTop: 0,
-    marginTop: 0,
   },
   content: {
-    padding: 30,
+    padding: 5
   },
   list: {
-    marginTop: 0,
+    marginTop: '25%'
   },
-  bottom: {
+  flex: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
+    width: '100%',
     padding: 20,
+    marginBottom: 20
   },
   buttonStyle: {
-    backgroundColor: "#3399FF",
+    backgroundColor: "#8B8B8B",
     borderWidth: 0,
     color: "#FFFFFF",
     borderColor: "#3399FF",
@@ -204,14 +190,15 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 20,
+    bottom: '7%',
+    width: '100%'
   },
   buttonTextStyle: {
-    color: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 15,
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: "Helvetica Neue"
   },
 });

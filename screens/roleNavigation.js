@@ -103,7 +103,7 @@ export default function App({ navigation }) {
           animation: "none",
         }}
       >
-        {Farm == true && (
+        {Farm == false && (
           <>
             <Stack.Screen
               name="farmHome"

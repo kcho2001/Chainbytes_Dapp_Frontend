@@ -35,7 +35,7 @@ export default function Home({ route }) {
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [balance, setBalance] = useState('');
-  const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
+  //const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
   const bg = backgroundColor()
 
 
@@ -59,7 +59,7 @@ export default function Home({ route }) {
 
   if (loading || loading2) {
     return (
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
         <Spinner
           visible={loading}
           textContent={"Loading..."}
@@ -89,12 +89,7 @@ export default function Home({ route }) {
           </View>
           <View style={styles.subContainer}>
             <Text style={styles.subText}>
-              Balance:{" "}
-              <HighlightText
-                highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={["1000 ETH"]}
-                textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
-              />
+              Balance: {balance.slice(0, 7) + ' GoerliETH'}
             </Text>
           </View>
           <View style={styles.subContainer}>
