@@ -18,7 +18,19 @@ export default function BatchPay() {
   const [rate, setRate] = useState(0);
   const [exchangeRate, setExchangeRate] = useState(10000);
   const [workers, setWorkers] = useState([]);
+  const [balance, setBalance] = useState(0);
   const tc = textColor();
+
+  // This is to update the balance anytime the workers or rate is changed
+  useEffect(() => {
+    let _balance = 0;
+    for (let worker of workers) {
+      if (worker.workerCheckedIn.daysUnpaid != 0) {
+        _balance += worker.workerCheckedIn.daysUnpaid * rate;
+      }
+    }
+    setBalance(_balance);
+  }, [rate, workers]);
 
   // Function to get current rate of ETH for USD
   async function getPrice(setExchangeRate) {
@@ -54,15 +66,12 @@ export default function BatchPay() {
         (worker) => worker.workerCheckedIn.id != key.id
       );
     });
-    // setBalance((prevBalance) => {
-    //   return prevBalance - key.daysUnpaid * rate;
-    // });
   };
 
   const connector = useWalletConnect();
 
   const batchPay = React.useCallback(
-    async (rate) => {
+    async (rate, workers) => {
       try {
         var date = moment().utcOffset("-04:00").format("YYYY-MM-DD hh:mm:ss a");
         const provider = new WalletConnectProvider({
@@ -101,7 +110,6 @@ export default function BatchPay() {
           }
           console.log(rate);
         }
-        //let formattedBalance = ethers.utils.formatEther(balance);
         // Override to allow a value to be added when calling contract
         let overrides = {
           // To convert Ether to Wei:
@@ -169,8 +177,44 @@ export default function BatchPay() {
             </View>
           </View>
           <View style={styles.bottom}>
+            <View
+              style={{
+                flexDirection: "row",
+                textAlignVertical: "center",
+              }}
+            >
+              <Text>Total balance:{"     "}</Text>
+              <View style={{ flexDirection: "column" }}>
+                <Text
+                  style={{
+                    alignSelf: "flex-start",
+                    textAlignVertical: "top",
+                    position: "relative",
+                  }}
+                >
+                  ~${balance.toString()}
+                </Text>
+                <Text
+                  style={{
+                    textAlignVertical: "bottom",
+                    position: "relative",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  {ethers.utils
+                    .formatEther(
+                      ethers.BigNumber.from(balance)
+                        .mul(exchangeRate)
+                        .toString()
+                    )
+                    .slice(0, 7)}{" "}
+                  ETH
+                </Text>
+              </View>
+            </View>
+
             <View>
-              <Text style={{ padding: 15 }}>
+              <Text style={{ padding: 15, paddingBottom: 5 }}>
                 Rate to pay workers (USD per day)
               </Text>
               <TextInput
@@ -189,7 +233,7 @@ export default function BatchPay() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.buttonStyle}
-              onPress={() => batchPay(rate)}
+              onPress={() => batchPay(rate, workers)}
             >
               <Text style={styles.buttonTextStyle}> Pay workers </Text>
             </TouchableOpacity>
