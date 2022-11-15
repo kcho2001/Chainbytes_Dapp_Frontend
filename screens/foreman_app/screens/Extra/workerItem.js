@@ -1,26 +1,22 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Text, textColor, View } from "../../../../components/Themed";
+import {Text } from "../../../../components/Themed"
 import { isAddress } from "ethers/lib/utils";
 
 export default function WorkerItem({ item, pressHandler }) {
   return (
     <TouchableOpacity onPress={() => pressHandler(item.text)}>
-      <Text style={styles.item}>
-        {isAddress(item.text) ? shortenAddress2(item.text) : item.text}
-      </Text>
+      <Text style={styles.item}>{isAddress(item.text) ? shortenAddress2(item.text) : item.text}</Text>
     </TouchableOpacity>
   );
 }
 
 export function WorkerCheckinItem({ item, pressHandler }) {
-  const tc = textColor();
   return (
     <TouchableOpacity onPress={() => pressHandler(item)}>
-      <View style={styles.checkInItem}>
-        <Text style={styles.checkInText}>{shortenAddress(item.id)}:</Text>
-        <Text style={styles.days}>{item.daysUnpaid}</Text>
-      </View>
+      <Text style={styles.item}>
+        {shortenAddress(item.id)}: {item.daysUnpaid}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -44,11 +40,6 @@ const shortenAddress2 = (address) => {
 };
 
 const styles = StyleSheet.create({
-  days: {
-    alignSelf: "flex-end",
-    fontFamily: "HelveticaNeue-Bold",
-  },
-
   item: {
     padding: 16,
     marginTop: 16,
@@ -56,22 +47,17 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderStyle: "dashed",
     borderRadius: 20,
-    alignSelf: "center",
-    width: "100%",
-    fontFamily: "HelveticaNeue-Bold",
+    alignSelf: 'center',
+    width: '100%',
+    fontFamily: "HelveticaNeue-Bold"
   },
   checkInItem: {
     padding: 16,
     marginTop: 16,
     borderColor: "#bbb",
-    borderWidth: 2,
-    borderRadius: 20,
-    width: "100%",
-    justifyContent: "space-between",
-    flex: 1,
-    flexDirection: "row",
-  },
-  checkInText: {
-    fontFamily: "HelveticaNeue-Bold",
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderRadius: 10,
+    fontSize: 8,
   },
 });

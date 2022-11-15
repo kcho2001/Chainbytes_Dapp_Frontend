@@ -1,8 +1,7 @@
 import { StyleSheet, Button } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, View, backgroundColor } from "../../components/Themed";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { Text, View, backgroundColor } from '../../components/Themed';
 
 const shortenAddress = (address) => {
   global.myAddress = address;
@@ -13,9 +12,8 @@ const shortenAddress = (address) => {
   return ret;
 };
 
-export default function QRWallet() {
-  const connector = useWalletConnect();
-  const address = connector.accounts[0]; //Address to use for querying the balance, once we get the address
+export default function QRWallet(props) {
+  const address = props.address; //Address to use for querying the balance, once we get the address
   const bg = backgroundColor();
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: bg }]}>
@@ -39,8 +37,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   mainContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     width: "100%",
     paddingTop: 50,
     // backgroundColor: 'green'
@@ -55,18 +53,18 @@ const styles = StyleSheet.create({
   QRContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: '100%',
     width: "100%",
     paddingBottom: 250,
     // backgroundColor: 'blue',
   },
   walletText: {
     fontSize: 50,
-    fontFamily: "HelveticaNeue-Bold",
+    fontFamily: "HelveticaNeue-Bold"
   },
   addressText: {
     fontSize: 25,
     paddingBottom: 50,
-    fontFamily: "Helvetica Neue",
+    fontFamily: "Helvetica Neue"
   },
 });

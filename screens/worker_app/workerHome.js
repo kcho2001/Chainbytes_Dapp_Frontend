@@ -19,7 +19,7 @@ let contract = new ethers.Contract(
   provider
 );
 
-export default function WorkerHomeScreen() {
+export default function WorkerHomeScreen(props) {
   const connector = useWalletConnect();
   const my_address = connector.accounts[0];
   const [lastCheckedIn, setCheckedIn] = React.useState("N/A");
