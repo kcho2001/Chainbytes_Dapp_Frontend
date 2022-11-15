@@ -19,6 +19,19 @@ export const GET_CHECKINS = gql`
   }
 `;
 
+export const GET_WORKER_CHECKINS = (id) =>
+  gql`
+  query {
+  worker(id: "${id}") {
+    	checkIns{
+        year
+        month
+        day
+      }
+    }
+  }
+`;
+
 const App = () => (
   <ApolloProvider client={client}>
     <app />
