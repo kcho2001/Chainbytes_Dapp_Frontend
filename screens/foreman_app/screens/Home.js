@@ -60,7 +60,7 @@ export default function Home({ route }) {
 
   if (loading || loading2) {
     return (
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
         <Spinner
           visible={loading}
           textContent={"Loading..."}
@@ -91,8 +91,8 @@ export default function Home({ route }) {
               Balance:{" "}
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={[balance.slice(0, 7)]}
-                textToHighlight={balance.slice(0, 7) + " GoerliETH"}
+                searchWords={["1000 ETH"]}
+                textToHighlight={balance.slice(0, 7) + ' GoerliETH'}
               />
             </Text>
           </View>

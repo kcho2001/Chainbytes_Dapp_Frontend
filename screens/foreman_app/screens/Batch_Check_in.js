@@ -176,10 +176,10 @@ export default function Checked_in({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   content: {
-    padding: 5
+    padding: 5,
   },
   list: {
     marginTop: '25%'
@@ -188,7 +188,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
+    width: '100%',
     padding: 20,
+    marginBottom: 20
   },
   buttonStyle: {
     backgroundColor: "#8B8B8B",
@@ -200,9 +202,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 20,
     marginBottom: 20,
-    bottom: '7%'
+    bottom: '7%',
+    width: '100%'
   },
   buttonTextStyle: {
     paddingVertical: 10,

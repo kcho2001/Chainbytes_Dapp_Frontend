@@ -27,7 +27,7 @@ const Tabs = ({ route }) => {
         gestureEnabled: false,
         headerBackVisible: false,
         headerTransparent: true,
-        detachInactiveScreens: true, 
+        detachInactiveScreens: true,
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -53,24 +53,33 @@ const Tabs = ({ route }) => {
           color: color
         },
         tabBarShowLabel: false,
-
         // Different tab bar style (uncomment to see)
         tabBarStyle: {
           position: 'absolute',
           flex: 1,
           alignItems: 'center',
           justifyContent: "center",
-          bottom: '2%',
+          bottom: '5%',
           left: 15,
           right: 15,
           backgroundColor: bg,
-          borderRadius: 15,
+          borderRadius:0,
           borderWeight: 2,
           borderTopColor: bg,
-          height: 50,
-          ...stlyes.shadow
+          height: 60,
+          ...styles.shadow
         },
-        tabBarActiveTintColor: color
+        tabBarActiveTintColor: color,
+        tabBarItemStyle:{
+          backgroundColor:'#00ff00',
+          margin:5,
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center'
+        },
+        tabBarIconStyle: {
+          flex: 1
+        },
       })}
     >
       <Tab.Screen
@@ -79,7 +88,7 @@ const Tabs = ({ route }) => {
         component={Scanner}
         options={{
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name={"camera"} color={color} size={size} style={{ textAlignVertical: 'center' }} />
+            <Ionicons name={"camera"} color={color} size={size} />
           ),
         }}
       ></Tab.Screen>
@@ -121,7 +130,7 @@ const Tabs = ({ route }) => {
 };
 
 // style sheet
-const stlyes = StyleSheet.create({
+const styles = StyleSheet.create({
   shadow: {
     shadowColor: "lightgrey",
     shadowOffset: {

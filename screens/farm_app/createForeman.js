@@ -1,14 +1,9 @@
 import { NavigationContainer, useRoute } from "@react-navigation/native";
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  Alert,
-  View,
   Pressable,
-  Modal,
 } from "react-native";
 import React from "react";
 import { ethers } from "ethers";
@@ -19,9 +14,14 @@ import ethereum_address from "ethereum-address";
 
 import * as config from "../ChainBytesConfig.js";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { View, Text, textColor, backgroundColor } from "../../components/Themed"
+
+
 
 export default function CreateForeman({ navigation }) {
   const [newForemanAddress, onChangeText] = React.useState(null);
+  const tc = textColor();
+  const bg = backgroundColor();
   const route = useRoute();
 
   // This is to handle returning from qrModal and retrieving scanned data
@@ -88,22 +88,27 @@ export default function CreateForeman({ navigation }) {
 
   return (
     <NavigationContainer independent={true}>
-      <SafeAreaView style={styles.screen}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          placeholder="Address of new Foreman"
-          value={newForemanAddress != null ? newForemanAddress : ""}
-          placeholderTextColor="grey"
-        />
-        <View style={{ paddingVertical: 20 }}>
+      <View style={[styles.screen, { backgroundColor: bg }]}>
+        <View style={{width: '100%', height: '40%', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: '10%'}}>
+          <TextInput
+            style={[styles.input, { borderColor: tc, color: tc, fontSize: 30 }]}
+            allowFontScaling={true}
+            onChangeText={onChangeText}
+            clearButtonMode={'while-editing'}
+            textAlign={'center'}
+            placeholder="Address of new Foreman"
+            value={newForemanAddress != null ? newForemanAddress : ""}
+            placeholderTextColor="lightgray"
+          />
+        </View>
+        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Pressable
             onPress={() => navigation.navigate("qrModal")}
             style={({ pressed }) => ({
               opacity: pressed ? 0.5 : 1,
             })}
           >
-            <Ionicons name={"qr-code"} size={40} />
+            <Ionicons name={"qr-code"} size={100} color={tc} />
           </Pressable>
         </View>
 
@@ -118,7 +123,7 @@ export default function CreateForeman({ navigation }) {
             <Text style={styles.buttonTextStyle}>Create Foreman</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     </NavigationContainer>
   );
 }
@@ -127,8 +132,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingTop: 80,
+    justifyContent: "flex-start"
   },
   mainText: {
     fontSize: 20,
@@ -138,21 +142,24 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   input: {
-    height: 40,
+    height: 50,
+    width: '95%',
     margin: 12,
     marginVertical: 0,
     borderWidth: 1,
     padding: 10,
-    paddingVertical: 0,
+    paddingVertical: 0
+    
   },
   bottom: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "flex-start",
     alignItems: "center",
-    padding: 20,
+    paddingTop: 40,
+    width: '100%',
   },
   buttonStyle: {
-    backgroundColor: "#3399FF",
+    backgroundColor: "#8B8B8B",
     borderWidth: 0,
     color: "#FFFFFF",
     borderColor: "#3399FF",
@@ -161,8 +168,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginLeft: 35,
     marginRight: 35,
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    bottom: '7%',
+    width: '95%'
   },
   buttonTextStyle: {
     color: "#FFFFFF",

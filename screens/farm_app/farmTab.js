@@ -6,11 +6,14 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import BatchPay from "./batchPay";
 import CreateForeman from "./createForeman";
 import HomeTab from "./Home";
+import { textColor, backgroundColor, View } from '../../components/Themed'
 
 const Tab = createBottomTabNavigator();
 
 export default function FarmTab({ navigation }) {
   const connector = useWalletConnect();
+  const color = textColor()
+  const bg = backgroundColor();
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -18,6 +21,8 @@ export default function FarmTab({ navigation }) {
         headerShown: true,
         gestureEnabled: false,
         headerBackVisible: false,
+        headerTransparent: true,
+        detachInactiveScreens: true,
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -29,31 +34,38 @@ export default function FarmTab({ navigation }) {
               name="info-circle"
               size={25}
               style={{ marginRight: 15 }}
+              color={color}
             />
           </Pressable>
         ),
-        headerStyle: {
-          backgroundColor: "#C4A484",
-        },
+        // headerStyle: {
+        //   backgroundColor: "#C4A484",
+        // },
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: "800",
-          fontFamily: "Cochin",
+          fontFamily: "HelveticaNeue-Bold",
+          color: color
         },
         tabBarShowLabel: false,
 
         // Different tab bar style (uncomment to see)
-        /*tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 25,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: "#ffffff",
-                    borderRadius: 100,
-                    height: 90,
-                    ... stlyes.shadow
-                }*/
+        tabBarStyle: {
+          position: 'absolute',
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: "center",
+          bottom: '2%',
+          left: 15,
+          right: 15,
+          backgroundColor: bg,
+          borderRadius: 15,
+          borderWeight: 2,
+          borderTopColor: bg,
+          height: 50,
+          ...styles.shadow
+        },
+        tabBarActiveTintColor: color
       })}
     >
       <Tab.Screen
@@ -102,5 +114,15 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 20,
     color: "white",
+  },
+
+  shadow: {
+    shadowColor: "lightgrey",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
   },
 });
