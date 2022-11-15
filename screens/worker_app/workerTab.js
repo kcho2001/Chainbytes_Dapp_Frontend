@@ -8,6 +8,7 @@ import WorkCalendar from "./workerCalendar";
 import { ethers } from "ethers";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { textColor, backgroundColor, View } from "../../components/Themed";
+import { tabBarStyles } from "../../style";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,10 +28,7 @@ export default function WorkerTab({ route }) {
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
-            style={({ pressed }) => ({
-              opacity: pressed ? 0.5 : 1,
-            })}
-          >
+            style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1, })}>
             <FontAwesome
               name="info-circle"
               size={25}
@@ -39,33 +37,9 @@ export default function WorkerTab({ route }) {
             />
           </Pressable>
         ),
-        // headerStyle: {
-        //   backgroundColor: "#C4A484",
-        // },
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: "800",
-          fontFamily: "HelveticaNeue-Bold",
-          color: color,
-        },
+        headerTitleStyle: [tabBarStyles.headerTitleStyle, { color: color }],
         tabBarShowLabel: false,
-
-        // Different tab bar style (uncomment to see)
-        tabBarStyle: {
-          position: "absolute",
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          bottom: '2%',
-          left: 15,
-          right: 15,
-          backgroundColor: bg,
-          borderRadius: 15,
-          borderWeight: 2,
-          borderTopColor: bg,
-          height: 50,
-          ...styles.shadow,
-        },
+        tabBarStyle: [tabBarStyles.bottomTabs, { backgroundColor: bg, borderTopColor: bg, }],
         tabBarActiveTintColor: color,
       })}
     >
@@ -99,25 +73,3 @@ export default function WorkerTab({ route }) {
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  bottomBar: {
-    backgroundColor: "#1e140a",
-    alignContent: "flex-end",
-    justifyContent: "flex-end",
-  },
-
-  mainText: {
-    fontSize: 20,
-    color: "white",
-  },
-  shadow: {
-    shadowColor: "lightgrey",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 5,
-  },
-});

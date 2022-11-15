@@ -8,10 +8,10 @@ import Scanner from "../screens/Scanner";
 import BatchCheckIn from "../screens/Batch_Check_in"
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { textColor, backgroundColor, View } from '../../../components/Themed'
+import { tabBarStyles } from "../../../style";
 
 // creates the tab navigator
 const Tab = createBottomTabNavigator();
-
 
 // creates the tabs
 const Tabs = ({ route }) => {
@@ -43,40 +43,11 @@ const Tabs = ({ route }) => {
             />
           </Pressable>
         ),
-        // headerStyle: {
-        //   backgroundColor: ,
-        // },
-        headerTitleStyle: {
-          fontSize: 20,
-          fontWeight: "800",
-          fontFamily: "HelveticaNeue-Bold",
-          color: color
-        },
+        headerTitleStyle: [tabBarStyles.headerTitleStyle, { color: color }],
         tabBarShowLabel: false,
-        // Different tab bar style (uncomment to see)
-        tabBarStyle: {
-          position: 'absolute',
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: "center",
-          bottom: '5%',
-          left: 15,
-          right: 15,
-          backgroundColor: bg,
-          borderRadius:0,
-          borderWeight: 2,
-          borderTopColor: bg,
-          height: 60,
-          ...styles.shadow
-        },
+        tabBarStyle: [tabBarStyles.bottomTabs, { backgroundColor: bg, borderTopColor: bg, }],
         tabBarActiveTintColor: color,
-        tabBarItemStyle:{
-          backgroundColor:'#00ff00',
-          margin:5,
-          height: '100%',
-          justifyContent: 'center',
-          alignItems: 'center'
-        },
+        //tabBarItemStyle: tabBarStyles.tabBarItemStyle,
         tabBarIconStyle: {
           flex: 1
         },
@@ -128,18 +99,5 @@ const Tabs = ({ route }) => {
     </Tab.Navigator>
   );
 };
-
-// style sheet
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: "lightgrey",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.6,
-    shadowRadius: 5,
-  },
-});
 
 export default Tabs;

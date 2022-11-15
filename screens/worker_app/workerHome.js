@@ -5,12 +5,11 @@ import { ethers } from "ethers";
 import { SafeAreaView } from "react-native-safe-area-context";
 import HighlightText from "@sanar/react-native-highlight-text";
 import * as config from "../ChainBytesConfig.js";
-
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-
 import { Text, View, backgroundColor } from "../../components/Themed";
 import Spinner from "react-native-loading-spinner-overlay";
+import { homeStyles } from "../../style.js";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -40,38 +39,33 @@ export default function WorkerHomeScreen() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={homeStyles.container}>
         <Spinner
           visible={loading}
           textContent={"Loading..."}
-          textStyle={styles.spinnerTextStyle}
+          textStyle={homeStyles.spinnerTextStyle}
         />
       </View>
     );
   } else {
     return (
       <NavigationContainer independent={true}>
-        {/* <ImageBackground source={image} resizeMode="cover" style={styles.screen}> */}
-        <SafeAreaView style={[styles.screen, { backgroundColor: bg }]}>
-          <View style={styles.mainContainer}>
-            <Text style={styles.mainText}> Hello Worker </Text>
+        {/* <ImageBackground source={image} resizeMode="cover" style={homeStyles.screen}> */}
+        <SafeAreaView style={[homeStyles.screen, { backgroundColor: bg }]}>
+          <View style={homeStyles.mainContainer}>
+            <Text style={homeStyles.mainText}> Hello Worker </Text>
           </View>
-          <View style={styles.subContainer}>
-            <Text style={styles.subText}>Last checked in: {lastCheckedIn}</Text>
+          <View style={homeStyles.subContainer}>
+            <Text style={homeStyles.subText}>Last checked in: {lastCheckedIn}</Text>
           </View>
-          <View style={styles.subContainer}>
-            <Text style={styles.subText}>
-              Balance:{" "}
-              <HighlightText
-                highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={[balance.slice(0, 7)]}
-                textToHighlight={balance.slice(0, 7) + " GoerliETH"}
-              />
+          <View style={homeStyles.subContainer}>
+            <Text style={homeStyles.subText}>
+              Balance: {balance.slice(0, 7) + " GoerliETH"}
             </Text>
           </View>
-          {/* <View style={styles.imageView}>
+          {/* <View style={homeStyles.imageView}>
               <Image
-                style={styles.image}
+                style={homeStyles.image}
                 source={{
                   uri: "https://www.mcall.com/resizer/Yaa9q9hboZ0NjcEmlq4SfPDBoFU=/1200x795/top/cloudfront-us-east-1.images.arcpublishing.com/tronc/JUW4JCLFKBGRND33USOZQ4IUF4.jpg",
                 }}
@@ -83,60 +77,3 @@ export default function WorkerHomeScreen() {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "100%",
-    height: "100%",
-  },
-  mainContainer: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "100%",
-    paddingLeft: 5,
-    paddingTop: 100,
-    backgroundColor: "rgba(0,0,0,0)",
-  },
-  subContainer: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    width: "100%",
-    paddingLeft: 35,
-    backgroundColor: "rgba(0,0,0,0)",
-  },
-  mainText: {
-    fontSize: 50,
-    paddingBottom: 5,
-    paddingTop: 0,
-    marginTop: 0,
-    fontFamily: "HelveticaNeue-Bold",
-  },
-  subText: {
-    fontSize: 25,
-    paddingBottom: 5,
-    paddingTop: 0,
-    marginTop: 0,
-    fontFamily: "HelveticaNeue-Bold",
-  },
-  smolText: {
-    fontSize: 10,
-    color: "black",
-    paddingBottom: 5,
-    paddingTop: 0,
-    marginTop: 0,
-  },
-  image: {
-    height: 350,
-    width: 350,
-    borderRadius: 40,
-  },
-  imageView: {
-    justifyContent: "center",
-    alignSelf: "center",
-    alignItems: "center",
-    backgroundColor: "red",
-    paddingTop: 20,
-  },
-});

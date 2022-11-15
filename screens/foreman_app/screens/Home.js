@@ -10,6 +10,7 @@ import { checkedIn } from "./Batch_Check_in";
 import Spinner from "react-native-loading-spinner-overlay";
 
 import { Text, View, backgroundColor } from "../../../components/Themed";
+import { homeStyles } from "../../../style";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -60,34 +61,34 @@ export default function Home({ route }) {
 
   if (loading || loading2) {
     return (
-      <View style={styles.mainContainer}>
+      <View style={homeStyles.mainContainer}>
         <Spinner
           visible={loading}
           textContent={"Loading..."}
-          textStyle={styles.spinnerTextStyle}
+          textStyle={homeStyles.spinnerTextStyle}
         />
       </View>
     );
   } else {
     return (
       <NavigationContainer independent={true}>
-        {/* <ImageBackground source={image} resizeMode="cover" style={styles.screen}> */}
-        <SafeAreaView style={[styles.screen, { backgroundColor: bg }]}>
-          <View style={styles.mainContainer}>
+        {/* <ImageBackground source={image} resizeMode="cover" style={homeStyles.screen}> */}
+        <SafeAreaView style={[homeStyles.screen, { backgroundColor: bg }]}>
+          <View style={homeStyles.mainContainer}>
             {foreman && (
-              <Text style={styles.mainText}>
+              <Text style={homeStyles.mainText}>
                 Hello, {shortenAddress(my_address)}{" "}
               </Text>
             )}
             {!foreman && (
-              <Text style={styles.mainText}>
+              <Text style={homeStyles.mainText}>
                 {" "}
                 Hello, Not Foreman! You shouldn't be here
               </Text>
             )}
           </View>
-          <View style={styles.subContainer}>
-            <Text style={styles.subText}>
+          <View style={homeStyles.subContainer}>
+            <Text style={homeStyles.subText}>
               Balance:{" "}
               <HighlightText
                 highlightStyle={{ backgroundColor: "#d3d3d3" }}
@@ -96,15 +97,15 @@ export default function Home({ route }) {
               />
             </Text>
           </View>
-          <View style={styles.subContainer}>
-            <Text style={styles.subText}>
+          <View style={homeStyles.subContainer}>
+            <Text style={homeStyles.subText}>
               You have checked in {(checkedIn() != 0 && checkedIn()) || "no"}{" "}
               {(checkedIn() != 1 && "workers") || "worker"} today
             </Text>
           </View>
-          {/* <View style={styles.imageView}>
+          {/* <View style={homeStyles.imageView}>
               <Image
-                style={styles.image}
+                style={homeStyles.image}
                 source={{
                   uri: "https://www.mcall.com/resizer/Yaa9q9hboZ0NjcEmlq4SfPDBoFU=/1200x795/top/cloudfront-us-east-1.images.arcpublishing.com/tronc/JUW4JCLFKBGRND33USOZQ4IUF4.jpg",
                 }}

@@ -12,7 +12,6 @@ import { useQuery } from "@apollo/client";
 import * as query from "../../query";
 import moment from "moment";
 import Spinner from "react-native-loading-spinner-overlay";
-import { View, Text, backgroundColor } from '../../components/Themed'
 
 export default function BatchPay() {
   //Rate is bound to change depending on how much the workers should be paid (amount in Wei)
