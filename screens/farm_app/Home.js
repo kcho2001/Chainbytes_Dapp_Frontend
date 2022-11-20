@@ -8,8 +8,7 @@ import * as config from "../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import Spinner from "react-native-loading-spinner-overlay";
 
-import { Text, View, backgroundColor } from '../../components/Themed';
-
+import { Text, View, backgroundColor } from "../../components/Themed";
 
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -32,16 +31,16 @@ export default function Home({ route }) {
   const connector = useWalletConnect();
   const my_address = connector.accounts[0];
   const [Farm, setFarm] = useState(true);
-  const [Loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [balance, setBalance] = useState('');
+  const [balance, setBalance] = useState("");
   //const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
-  const bg = backgroundColor()
+  const bg = backgroundColor();
   useEffect(() => {
     async function getBalance() {
       await provider.getBalance(connector.accounts[0]).then((result) => {
-        setBalance(ethers.utils.formatEther(result))
-        setLoading2(false)
+        setBalance(ethers.utils.formatEther(result));
+        setLoading2(false);
       });
     }
     getBalance();
@@ -67,9 +66,7 @@ export default function Home({ route }) {
     );
   } else {
     return (
-      <NavigationContainer
-        independent={true}
-      >
+      <NavigationContainer independent={true}>
         {/* <ImageBackground source={image} resizeMode="cover" style={styles.screen}> */}
         <SafeAreaView style={[styles.screen, { backgroundColor: bg }]}>
           <View style={styles.mainContainer}>
@@ -107,9 +104,7 @@ export default function Home({ route }) {
           </View>
           {/**This will display the amount of active workers under the farm */}
           <View style={styles.subContainer}>
-            <Text style={styles.subText}>
-              You have no/# unpaid Workers
-            </Text>
+            <Text style={styles.subText}>You have no/# unpaid Workers</Text>
           </View>
           {/* <View style={styles.imageView}>
           <Image
@@ -131,7 +126,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
-    height: "100%"
+    height: "100%",
   },
   mainContainer: {
     alignItems: "flex-start",
@@ -139,21 +134,21 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingLeft: 5,
     paddingTop: 100,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: "rgba(0,0,0,0)",
   },
   subContainer: {
     alignItems: "flex-start",
     justifyContent: "flex-start",
     width: "100%",
     paddingLeft: 35,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: "rgba(0,0,0,0)",
   },
   mainText: {
     fontSize: 50,
     paddingBottom: 5,
     paddingTop: 0,
     marginTop: 0,
-    fontFamily: "HelveticaNeue-Bold"
+    fontFamily: "HelveticaNeue-Bold",
   },
   subText: {
     fontSize: 25,
@@ -178,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     alignItems: "center",
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingTop: 20,
   },
 });
