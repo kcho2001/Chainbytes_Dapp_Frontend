@@ -10,11 +10,9 @@ export const client = new ApolloClient({
 
 export const GET_CHECKINS = gql`
   query {
-    checkIns {
-      workerCheckedIn {
-        id
-        daysUnpaid
-      }
+    workers {
+      id
+      daysUnpaid
     }
   }
 `;
