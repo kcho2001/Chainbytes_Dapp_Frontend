@@ -35,14 +35,14 @@ export default function Home({ route }) {
   const [Farm, setFarm] = useState(true);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [balance, setBalance] = useState('');
+  const [balance, setBalance] = useState("");
   //const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
-  const bg = backgroundColor()
+  const bg = backgroundColor();
   useEffect(() => {
     async function getBalance() {
       await provider.getBalance(connector.accounts[0]).then((result) => {
-        setBalance(ethers.utils.formatEther(result))
-        setLoading2(false)
+        setBalance(ethers.utils.formatEther(result));
+        setLoading2(false);
       });
     }
     getBalance();
