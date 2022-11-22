@@ -67,7 +67,12 @@ export default function BatchPay() {
 
   const { loading, error, data, refetch } = useQuery(query.GET_CHECKINS, {
     onCompleted: () => {
-      setWorkers(data.workers);
+      setWorkers(() => {
+        return data.workers
+      });
+      setWorkers((workers) => {
+        return workers.map(el => ({ ...el, selected: false }))
+      })
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -77,6 +82,14 @@ export default function BatchPay() {
       return prevWorkers.filter((worker) => worker.id != key.id);
     });
   };
+
+  const highlightWorker = (key) => {
+    if (workers.filter((worker) => worker.id == key.id)[0].selected === true) {
+      workers.filter((worker) => worker.id == key.id)[0].selected = false
+    } else {
+      workers.filter((worker) => worker.id == key.id)[0].selected = true
+    }
+  }
 
   const connector = useWalletConnect();
 
@@ -198,8 +211,9 @@ export default function BatchPay() {
                           item={{
                             id: item.id,
                             daysUnpaid: item.daysUnpaid,
+                            selected: item.selected
                           }}
-                          pressHandler={removeWorker}
+                          pressHandler={highlightWorker}
                           keyExtractor={(item, index) => index.toString()}
                         ></WorkerCheckinItem>
                       </View>
@@ -279,9 +293,9 @@ export default function BatchPay() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={() => batchPay(rate, workers)}
+                onPress={() => batchPay(rate, workers.filter((worker) => worker.selected == true))}
               >
-                <Text style={styles.buttonTextStyle}> Pay workers </Text>
+                <Text style={styles.buttonTextStyle}> Pay selected workers </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -295,7 +309,6 @@ export default function BatchPay() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   screen: {
     flex: 1,

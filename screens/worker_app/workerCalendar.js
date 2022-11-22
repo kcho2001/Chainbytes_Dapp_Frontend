@@ -14,6 +14,7 @@ import * as query from "../../query";
 import { useQuery } from "@apollo/client";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
+
 // Contract declaration
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -28,11 +29,11 @@ function formatDates(checkIns, setCheckIns) {
     setCheckIns((prevCheckIns) => {
       const formattedDate = date.year + "-" + date.month + "-" + date.day;
       return {
-        [formattedDate]: { selectedColor: "#90EE90", selected: true },
+        [formattedDate]: { selectedColor: "#8F8F8F", selected: true },
         prevCheckIns,
       };
     });
-    console.log(date.year + "-" + date.month + "-" + date.day);
+    // console.log(date.year + "-" + date.month + "-" + date.day);
   }
 }
 
@@ -51,8 +52,9 @@ export default function WorkCalendar(props) {
     query.GET_WORKER_CHECKINS(connector.accounts[0]),
     {
       onCompleted: () => {
-        // console.log(data.worker.checkIns[0].day);
-        formatDates(data.worker.checkIns, setCheckIns);
+        if (data.worker != null) {
+          formatDates(data.worker.checkIns, setCheckIns);
+        }
       },
       notifyOnNetworkStatusChange: true,
     }

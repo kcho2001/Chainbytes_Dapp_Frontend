@@ -17,9 +17,9 @@ export function WorkerCheckinItem({ item, pressHandler }) {
   const tc = textColor();
   return (
     <TouchableOpacity onPress={() => pressHandler(item)}>
-      <View style={styles.checkInItem}>
-        <Text style={styles.checkInText}>{shortenAddress(item.id)}:</Text>
-        <Text style={styles.days}>{item.daysUnpaid}</Text>
+      <View style={[styles.checkInItem, (item.selected ? {backgroundColor: 'yellow'} : {})]}>
+        <Text style={[styles.checkInText, (item.selected ? {color: 'black'} : {})]}>{shortenAddress(item.id)}:</Text>
+        <Text style={[styles.days, (item.selected ? {color: 'black'} : {})]}>{item.daysUnpaid}</Text>
       </View>
     </TouchableOpacity>
   );

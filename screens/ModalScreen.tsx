@@ -29,7 +29,7 @@ export default function ModalScreen({ navigation }) {
       <Text style={styles.title}>Currently logged in as:</Text>
       <Text style={styles.addressText}>{shortenAddress(connector.accounts[0])}</Text>
       <View style={styles.screen}>
-        <View style={[styles.signInBackground, { borderColor: tc }]}>
+        {/* <View style={[styles.signInBackground, { borderColor: tc }]}>
           <TouchableOpacity
             style={styles.signInButton}
             onPress={() => navigation.navigate("farmHome")}
@@ -50,13 +50,13 @@ export default function ModalScreen({ navigation }) {
             <Text style={styles.signInText}>Sign in to Worker</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
-            <Text style={styles.buttonTextStyle}>Log out</Text>
-          </TouchableOpacity>
-        </View>
+        </View> */}
         <SafeAreaView style={styles.container2}>
-          <QRCode size={200} value={connector.accounts[0]} />
+          <QRCode size={320} value={connector.accounts[0]} />
         </SafeAreaView>
+        <TouchableOpacity onPress={killSession} style={styles.buttonStyle}>
+          <Text style={styles.buttonTextStyle}>Log out</Text>
+        </TouchableOpacity>
         <StatusBar style="auto" />
       </View>
       <View>
@@ -96,18 +96,19 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     borderColor: "#3399FF",
     height: 40,
+    width: 300,
     alignItems: "center",
     borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
+    // marginLeft: 35,
+    // marginRight: 35,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: '15%',
   },
   buttonTextStyle: {
     color: "#FFFFFF",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "600",
   },
   signInBackground: {

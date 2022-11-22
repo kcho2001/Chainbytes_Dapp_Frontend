@@ -38,8 +38,13 @@ export default function Home({ route }) {
   const [balance, setBalance] = useState("");
   //const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
   const bg = backgroundColor();
+  const [chainId, setChainId] = useState()
+
   useEffect(() => {
     async function getBalance() {
+      await provider.getNetwork().then((result) => {
+        setChainId(result.name)
+      })
       await provider.getBalance(connector.accounts[0]).then((result) => {
         setBalance(ethers.utils.formatEther(result));
         setLoading2(false);
@@ -97,7 +102,7 @@ export default function Home({ route }) {
               />
             </Text> */}
             <Text style={homeStyles.subText}>
-              Balance: {balance.slice(0, 7) + " GoerliETH"}
+              Balance: {balance.slice(0, 7) + " ETH on " + chainId.charAt(0).toUpperCase() + chainId.slice(1)}
             </Text>
           </View>
           {/**This will display the amount of active workers under the farm */}

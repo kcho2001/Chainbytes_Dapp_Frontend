@@ -23,6 +23,20 @@ export function checkedIn() {
   return checkIn;
 }
 
+const checkinFailed = () => {
+  Alert.alert(
+    "BATCH CHECK IN ERROR",
+    "The Batch Check-In operation has Failed",
+    [
+      {
+        text: "Dismiss",
+        style: "cancel",
+      },
+    ],
+    { cancelable: true }
+  );
+};
+
 // For connecting to the contract
 const provider = new ethers.providers.JsonRpcProvider(config.providerUrl);
 let contract = new ethers.Contract(
@@ -45,6 +59,7 @@ export default function Checked_in({ route }) {
       for (const worker of _workerAddress) {
         workers2.push(worker.text);
       }
+      console.log(workers2)
       const provider = new WalletConnectProvider({
         rpc: {
           5: config.providerUrl,
@@ -74,6 +89,8 @@ export default function Checked_in({ route }) {
         });
       } catch (e) {
         console.error(e);
+        checkinFailed();
+        setLoading(false)
       }
     },
     [connector]
