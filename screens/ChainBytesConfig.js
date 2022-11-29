@@ -1,3 +1,6 @@
+// Contract information that can be found on the deployed contract
+// contractAbi, contract address, and providerURL are necessary to 
+// connect to the contract from the frontend.
 export const contractAbi = [
   { inputs: [], name: "AddressNotFarm", type: "error" },
   { inputs: [], name: "AddressNotForeman", type: "error" },

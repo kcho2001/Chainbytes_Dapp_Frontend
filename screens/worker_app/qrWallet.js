@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View, backgroundColor } from "../../components/Themed";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
+// Function to abbreviate address
 const shortenAddress = (address) => {
   global.myAddress = address;
   let ret = `${address.slice(0, 6)}...${address.slice(
@@ -18,6 +19,7 @@ export default function QRWallet() {
   const address = connector.accounts[0]; //Address to use for querying the balance, once we get the address
   const bg = backgroundColor();
   return (
+    // Returns abbreviated address with qrCode scannable version
     <SafeAreaView style={[styles.container, { backgroundColor: bg }]}>
       <View style={styles.mainContainer}>
         <Text style={styles.walletText}> My Wallet</Text>
@@ -43,14 +45,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     paddingTop: 50,
-    // backgroundColor: 'green'
   },
   subContainer: {
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 20,
     width: "100%",
-    // backgroundColor: 'red'
   },
   QRContainer: {
     alignItems: "center",
@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     paddingBottom: 250,
-    // backgroundColor: 'blue',
   },
   walletText: {
     fontSize: 50,

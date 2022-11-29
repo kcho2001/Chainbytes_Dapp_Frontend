@@ -1,138 +1,12 @@
-// import React, { useState, useEffect } from "react";
-// import { StyleSheet, Button, Alert } from "react-native";
-// import { BarCodeScanner } from "expo-barcode-scanner";
-// import ethereum_address from "ethereum-address";
-
-// import { View, Text, textColor, backgroundColor } from "../../components/Themed"
-
-// export default function Scanner({ navigation }) {
-//   const [hasPermission, setHasPermission] = useState(null);
-//   const [scanned, setScanned] = useState(false);
-//   const [text, setText] = useState("Not yet scanned");
-//   const [active, setActive] = useState(true);
-
-//   // useEffect(
-//   //   () =>
-//   //     navigation.addListener("state", (state) => {
-//   //       let x = state.data.state.history.length;
-//   //       if (x === 2) {
-//   //         setActive(false);
-//   //       } else if (x === 1) {
-//   //         setActive(true);
-//   //       } else {
-//   //         console.log(
-//   //           "error: state.data.state.history.length showed length greater != 1 or 2: " +
-//   //             x
-//   //         );
-//   //       }
-//   //     }),
-//   //   []
-//   // );
-//   // setActive(true);
-
-//   const askForCameraPermission = () => {
-//     (async () => {
-//       const { status } = await BarCodeScanner.requestPermissionsAsync();
-//       setHasPermission(status === "granted");
-//     })();
-//   };
-
-//   // Request Camera Permission
-//   useEffect(() => {
-//     askForCameraPermission();
-//   }, []);
-
-//   // What happens when we scan the bar code
-//   const handleBarCodeScanned = ({ type, data }) => {
-//     navigation.navigate("Create Foreman", {
-//       data: data,
-//     });
-//     console.log("Type: " + type + "\nData: " + data);
-//   };
-
-//   // Check permissions and return the screens
-//   if (hasPermission === null) {
-//     return (
-//       <View style={styles.container}>
-//         <Text>Requesting for camera permission</Text>
-//       </View>
-//     );
-//   }
-
-//   if (hasPermission === false || active === false) {
-//     return (
-//       <View style={styles.container}>
-//         <Text style={{ margin: 10 }}>No access to camera</Text>
-//         <Button
-//           title={"Allow Camera"}
-//           onPress={() => askForCameraPermission()}
-//         />
-//       </View>
-//     );
-//   }
-
-//   // Return the View
-//   if (hasPermission === true && active === true) {
-//     return (
-//       <View style={styles.container}>
-//         <View style={styles.barcodebox}>
-//           <BarCodeScanner
-//             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-//             style={{ height: 400, width: 400 }}
-//           />
-//         </View>
-//         <Button
-//           title={"Disable Camera"}
-//           onPress={() => setHasPermission(false)}
-//         />
-//         <Text style={styles.maintext}>{text}</Text>
-//         {scanned && (
-//           <Button
-//             title={"Scan again?"}
-//             onPress={() => {
-//               setScanned(false), setText("");
-//             }}
-//             color="tomato"
-//           />
-//         )}
-//       </View>
-//     );
-//   }
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   maintext: {
-//     fontSize: 16,
-//     margin: 10,
-//   },
-//   barcodebox: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//     height: 300,
-//     width: 300,
-//     overflow: "hidden",
-//     borderRadius: 30,
-//     backgroundColor: "tomato",
-//     bottom: 25,
-//   },
-// });
-
-
 import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Button, Alert, Pressable } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import ethereum_address from "ethereum-address";
 
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
-import { randomBytes } from "ethers/lib/utils";
 import { View, Text, textColor } from "../../components/Themed"
 
+// Abbreviates wallet address
 const shortenAddress = (address) => {
   global.myAddress = address;
   let ret = `${address.slice(0, 6)}...${address.slice(
@@ -156,19 +30,6 @@ export default function Scanner({ navigation, route }) {
   const [height, setHeight] = useState(0)
   const intervalRef = useRef(null)
   const tc = textColor()
-
-  // useEffect(() => navigation.addListener('state', (state) => {
-  //   let x = state.data.state.history.length
-  //   if (x === 2) {
-  //     setActive(false)
-  //     clearInterval(intervalRef.current)
-  //     intervalRef.current = null
-  //   } else if (x === 1) {
-  //     setActive(true)
-  //   } else {
-  //     console.log("error: state.data.state.history.length showed length greater != 1 or 2: " + x)
-  //   }
-  // }), [])
 
   const askForCameraPermission = () => {
     (async () => {
@@ -197,6 +58,7 @@ export default function Scanner({ navigation, route }) {
     );
   };
 
+  // Resets parameters if a certain amount of time has passed
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       if (timeStamp < Date.now() - 200) {
@@ -224,6 +86,7 @@ export default function Scanner({ navigation, route }) {
     //console.log("Type: " + type + "\nData: " + data);
   };
 
+  // Handles when checkIn button is scanned
   const handleCheckIn = () => {
     if (ethereum_address.isAddress(text)) {
       navigation.navigate("Create Foreman", {

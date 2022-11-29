@@ -1,13 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet, Image } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import HighlightText from "@sanar/react-native-highlight-text";
 import { ethers } from "ethers";
 import * as config from "../ChainBytesConfig";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import Spinner from "react-native-loading-spinner-overlay";
-
 import { Text, View, backgroundColor } from '../../components/Themed';
 import { homeStyles } from "../../style";
 
@@ -19,6 +16,7 @@ let contract = new ethers.Contract(
   provider
 );
 
+// This function will turn an address into an abbreviated version
 const shortenAddress = (address) => {
   global.myAddress = address;
   let ret = `${address.slice(0, 6)}...${address.slice(
@@ -36,10 +34,10 @@ export default function Home({ route }) {
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
   const [balance, setBalance] = useState("");
-  //const image = { uri: "https://c4.wallpaperflare.com/wallpaper/525/880/875/logo-programming-java-cup-of-coffee-wallpaper-preview.jpg" };
   const bg = backgroundColor();
   const [chainId, setChainId] = useState()
 
+  // Queries the provider for: chainID, current user's balance, and current user's role according to the contract
   useEffect(() => {
     async function getBalance() {
       await provider.getNetwork().then((result) => {
@@ -76,7 +74,6 @@ export default function Home({ route }) {
       <NavigationContainer
         independent={true}
       >
-        {/* <ImageBackground source={image} resizeMode="cover" style={homeStyles.screen}> */}
         <SafeAreaView style={[homeStyles.screen, { backgroundColor: bg }]}>
           <View style={homeStyles.mainContainer}>
             {Farm && (
@@ -92,35 +89,18 @@ export default function Home({ route }) {
           </View>
           {/**This will display the active workers of the farm*/}
           <View style={homeStyles.subContainer}>
-            {/* <Text style={homeStyles.subText}>
-              {" "}
-              Active Workers:{" "}
-              <HighlightText
-                highlightStyle={{ backgroundColor: "#d3d3d3" }}
-                searchWords={["1000"]}
-                textToHighlight="1000"
-              />
-            </Text> */}
             <Text style={homeStyles.subText}>
               Balance: {balance.slice(0, 7) + " ETH on " + chainId.charAt(0).toUpperCase() + chainId.slice(1)}
             </Text>
           </View>
           {/**This will display the amount of active workers under the farm */}
           <View style={homeStyles.subContainer}>
+            {/* TODO: make a query to get total number of workers with daysUnpaid > 0, and display it here */}
             <Text style={homeStyles.subText}>
               You have no/# unpaid Workers
             </Text>
           </View>
-          {/* <View style={homeStyles.imageView}>
-          <Image
-            style={homeStyles.image}
-            source={{
-              uri: "https://ictcoffee.com/wp-content/uploads/2018/12/coffee-orgin-el-salvador-farm.jpg",
-            }}
-          />
-        </View> */}
         </SafeAreaView>
-        {/* </ImageBackground> */}
       </NavigationContainer>
     );
   }

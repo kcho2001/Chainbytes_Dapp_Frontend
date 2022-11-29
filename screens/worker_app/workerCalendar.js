@@ -83,7 +83,6 @@ export default function WorkCalendar(props) {
           //   console.log("selected day", day);
           // }}
           enableSwipeMonths={true}
-          // markedDates={{ checkIns }}
           markedDates={checkIns}
           style={{
             height: "100%",

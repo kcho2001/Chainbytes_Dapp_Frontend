@@ -10,8 +10,9 @@ import { textColor, backgroundColor, View } from '../../components/Themed'
 
 const Tab = createBottomTabNavigator();
 
+// This function will create the framework that allows for navigating between different screens through
+// icons located at the bottom of the screen
 export default function FarmTab({ navigation }) {
-  const connector = useWalletConnect();
   const color = textColor()
   const bg = backgroundColor();
   return (
@@ -23,6 +24,7 @@ export default function FarmTab({ navigation }) {
         headerBackVisible: false,
         headerTransparent: true,
         detachInactiveScreens: true,
+        // Adds in icon onto top right corner that pulls up modal
         headerRight: () => (
           <Pressable
             onPress={() => navigation.navigate("Modal")}
@@ -38,9 +40,6 @@ export default function FarmTab({ navigation }) {
             />
           </Pressable>
         ),
-        // headerStyle: {
-        //   backgroundColor: "#C4A484",
-        // },
         headerTitleStyle: {
           fontSize: 20,
           fontWeight: "800",
@@ -48,8 +47,6 @@ export default function FarmTab({ navigation }) {
           color: color
         },
         tabBarShowLabel: false,
-
-        // Different tab bar style (uncomment to see)
         tabBarStyle: {
           position: 'absolute',
           flex: 1,
@@ -69,6 +66,7 @@ export default function FarmTab({ navigation }) {
       })}
     >
       <Tab.Screen
+        // Create foreman tab
         name="Create Foreman"
         children={({ navigation }) => <CreateForeman navigation={navigation} />}
         options={{
@@ -78,7 +76,7 @@ export default function FarmTab({ navigation }) {
         }}
       />
       <Tab.Screen
-        //Home tab
+        // Home tab
         name="Home"
         component={HomeTab}
         options={{
@@ -88,6 +86,7 @@ export default function FarmTab({ navigation }) {
         }}
       ></Tab.Screen>
       <Tab.Screen
+        // Batch pay tab
         name="Batch Pay"
         children={() => <BatchPay />}
         options={{

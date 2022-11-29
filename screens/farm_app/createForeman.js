@@ -9,9 +9,7 @@ import React from "react";
 import { ethers } from "ethers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import { SafeAreaView } from "react-native-safe-area-context";
 import ethereum_address from "ethereum-address";
-
 import * as config from "../ChainBytesConfig.js";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { View, Text, textColor, backgroundColor } from "../../components/Themed"
@@ -34,6 +32,7 @@ export default function CreateForeman({ navigation }) {
   }, [route.params?.data]);
 
   const connector = useWalletConnect();
+
   // Function to create the foreman
   // NB: Handle result in a better way. Check for errors
   const createForeman = React.useCallback(
@@ -89,7 +88,8 @@ export default function CreateForeman({ navigation }) {
   return (
     <NavigationContainer independent={true}>
       <View style={[styles.screen, { backgroundColor: bg }]}>
-        <View style={{width: '100%', height: '40%', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: '10%'}}>
+        {/* TextInput for foreman address */}
+        <View style={{ width: '100%', height: '40%', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: '10%' }}>
           <TextInput
             style={[styles.input, { borderColor: tc, color: tc, fontSize: 30 }]}
             allowFontScaling={true}
@@ -101,6 +101,9 @@ export default function CreateForeman({ navigation }) {
             placeholderTextColor="lightgray"
           />
         </View>
+
+        {/* This allows for users to click the qr-code icon and be redirected to a modal that
+            allows for easy qr code scanning of addresses */}
         <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Pressable
             onPress={() => navigation.navigate("qrModal")}
@@ -112,6 +115,7 @@ export default function CreateForeman({ navigation }) {
           </Pressable>
         </View>
 
+        {/* Create foreman button */}
         <View style={styles.bottom}>
           <TouchableOpacity
             style={styles.buttonStyle}
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     paddingVertical: 0
-    
+
   },
   bottom: {
     flex: 1,

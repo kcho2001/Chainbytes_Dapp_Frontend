@@ -12,7 +12,6 @@ import { useQuery } from "@apollo/client";
 import * as query from "../../query";
 import moment from "moment";
 import Spinner from "react-native-loading-spinner-overlay";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function BatchPay() {
   //Rate is bound to change depending on how much the workers should be paid (amount in Wei)
@@ -51,7 +50,8 @@ export default function BatchPay() {
     )
       .then((response) => response.json())
       .then((data) => {
-        // Change ETH per USD to WEI per USD
+        // Change ETH per USD to WEI per USD so that users can input USD amount and then
+        // the program knows how much wei to actually send to the contract with the function call.
         var WEIPerETH = ethers.BigNumber.from("10").pow(18);
         var USDperETH = ethers.BigNumber.from(Math.ceil(data["USD"]));
         var exchangeRate = ethers.BigNumber.from(WEIPerETH).div(USDperETH);
@@ -65,6 +65,7 @@ export default function BatchPay() {
     refetch();
   };
 
+  // Querying theGraph to get all of the workers, and displaying daysUnpaid, etc.
   const { loading, error, data, refetch } = useQuery(query.GET_CHECKINS, {
     onCompleted: () => {
       setWorkers(() => {
@@ -77,12 +78,8 @@ export default function BatchPay() {
     notifyOnNetworkStatusChange: true,
   });
 
-  const removeWorker = (key) => {
-    setWorkers((prevWorkers) => {
-      return prevWorkers.filter((worker) => worker.id != key.id);
-    });
-  };
-
+  // This function is called whenever a row is selected from the FlatList, and highlights it.
+  // The highlighted workers will be sent to the contract function call as a parameter based on 'selected' field
   const highlightWorker = (key) => {
     if (workers.filter((worker) => worker.id == key.id)[0].selected === true) {
       workers.filter((worker) => worker.id == key.id)[0].selected = false
@@ -93,6 +90,7 @@ export default function BatchPay() {
 
   const connector = useWalletConnect();
 
+  // Function that calls the batchPay function on the Ethereum contract
   const batchPay = React.useCallback(
     async (rate, workers) => {
       try {
@@ -127,9 +125,8 @@ export default function BatchPay() {
             balance = ethers.BigNumber.from(balance).add(_balance);
           }
         }
-        // Override to allow a value to be added when calling contract
+        // Override to allow a custom value to be added when calling contract
         let overrides = {
-          // To convert Ether to Wei:
           value: balance.toString(), // ether in this case MUST be a string
         };
         await contract
@@ -154,6 +151,7 @@ export default function BatchPay() {
         </View>
       )}
       {error && <Text>Error: {error.message}</Text>}
+      {/* When query is done loading, there are no errors, but there are also no workers.... */}
       {!loading && !error && workers.length === 0 && (
         <View style={styles.container}>
           <View style={styles.content}>
@@ -174,6 +172,7 @@ export default function BatchPay() {
           </View>
         </View>
       )}
+      {/* When query is done loading, there are no errors, and there are workers.... */}
       {!loading && !error && workers.length != 0 && (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={styles.container}>
@@ -194,6 +193,8 @@ export default function BatchPay() {
                     Balance
                   </Text>
                 </View>
+                {/* List of WorkerCheckinItems that will display a worker's address and daysUnpaid.
+                    Their relative balance is also calculated and displayed */}
                 <FlatList
                   data={workers}
                   renderItem={({ item }) => (
@@ -232,7 +233,7 @@ export default function BatchPay() {
                 ></FlatList>
               </View>
             </View>
-
+            {/* Options/buttons found at the bottom of the screen */}
             <View style={styles.bottom}>
               <View
                 style={{
@@ -269,7 +270,7 @@ export default function BatchPay() {
                   </Text>
                 </View>
               </View>
-
+              {/* Portion that allows the rate (and subsequently the balances) to be changed according to userInput */}
               <View>
                 <Text style={{ padding: 15, paddingBottom: 5 }}>
                   Rate to pay workers (USD per day)

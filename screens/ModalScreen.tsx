@@ -6,6 +6,7 @@ import QRCode from "react-native-qrcode-svg";
 import { Text, textColor, View } from '../components/Themed';
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// Function to abbreviate address
 const shortenAddress = (address: string) => {
   global.myAddress = address;
   let ret = `${address.slice(0, 6)}...${address.slice(
@@ -29,28 +30,6 @@ export default function ModalScreen({ navigation }) {
       <Text style={styles.title}>Currently logged in as:</Text>
       <Text style={styles.addressText}>{shortenAddress(connector.accounts[0])}</Text>
       <View style={styles.screen}>
-        {/* <View style={[styles.signInBackground, { borderColor: tc }]}>
-          <TouchableOpacity
-            style={styles.signInButton}
-            onPress={() => navigation.navigate("farmHome")}
-          >
-            <Text style={styles.signInText}>Sign in to Farm</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.signInButton}
-            onPress={() => navigation.navigate("adminHome")}
-          >
-            <Text style={styles.signInText}>Sign in to Foreman</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.signInButton}
-            onPress={() => navigation.navigate("workerHome")}
-          >
-            <Text style={styles.signInText}>Sign in to Worker</Text>
-          </TouchableOpacity>
-
-        </View> */}
         <SafeAreaView style={styles.container2}>
           <QRCode size={320} value={connector.accounts[0]} />
         </SafeAreaView>

@@ -1,17 +1,18 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StyleSheet, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import QRWallet from "./qrWallet";
 import WorkerHomeScreen from "./workerHome";
 import WorkCalendar from "./workerCalendar";
-import { ethers } from "ethers";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { textColor, backgroundColor, View } from "../../components/Themed";
 import { tabBarStyles } from "../../style";
 
 const Tab = createBottomTabNavigator();
 
+// Defines the different screens that can be navigated to
+// Appears on the bottom of the scren
 export default function WorkerTab({ route }) {
   const connector = useWalletConnect();
   const color = textColor();
